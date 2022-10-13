@@ -13,14 +13,14 @@ router.post("/guias/insert", (req, res) => {
     const {nome, contato} = req.body
     if(!nome){ res.status(422).json('O nome é obrigatorio')
       return}
-    if(!contato){ res.status(422).json('O campo contato ainda nao foi preenchido')
+    if(!contato){ res.status(422).json('Por segurança o campo contato precisa ser preenchido')
       return}
      guia
     .save()
     .then((data) => res.status(201).send(data + 'Dados inseridos com susseso!'))
-    .catch((error) => res.status(404).json({ message: error }))
+    .catch((error) => res.status(400).json({ message: error }))
   }catch(error){
-    res.status(500)
+    res.status(500).send('Erro do servidor')
     console.error({ error: error })
   }
 });
@@ -31,8 +31,8 @@ router.get("/guias/read", (req, res) => {
     guia
     .find()
     .populate('trilha')
-    .then((data) => res.json((data)))
-    .catch((error) => res.json({ message: error }))
+    .then((data) => res.status(200).json((data)))
+    .catch((error) => res.status(404).json({ message: error }))
   }catch(error){
     res.status(500)
     console.error({ error: error })
@@ -43,6 +43,7 @@ router.get("/guias/read", (req, res) => {
 router.get('/guias/read/:id', (req, res) => {
   try{
     const { id } = req.params;
+    if(!id) return res.status(404).send({ error: 'Guia não encontrado'})
     guia
     .findById(id)
     .then((data) => res.status(200).send(data))
@@ -54,12 +55,34 @@ router.get('/guias/read/:id', (req, res) => {
 });
 
 // Update - atualizar dados ou inserir valores faltantes
-router.put('/guias/update/:id', (req, res) => {
+router.patch('/guias/update/patch/:id', (req, res) => {
   try {
     const { id } = req.params;
-    const requisicao = (req.body);
-    const dados = requisicao
+    const dados = (req.body);
 
+    guia
+    .updateOne({ _id: id }, { $set: dados })
+    .then((data) => res.status(200).json(data + 'Atualizado com susseso'))
+    .catch((error) => res.status(304).json({message: error + 'Nao foi possivel fazer atualizacao dos dados! O ID não existe'}))
+  
+    console.log(dados);
+  } catch (error) {
+    res.status(500)
+    console.error({ error: error })
+  }
+
+});
+
+// Update - atualizar dados
+router.put('/guias/update/put/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const dados = (req.body);
+
+    if(!nome){ res.status(422).json('O campo nome ainda nao foi preenchido')
+    return}
+    if(!contato){ res.status(422).json('O campo contato ainda nao foi preenchido')
+    return}
     guia
     .updateOne({ _id: id }, { $set: dados })
     .then((data) => res.status(200).json(data + 'Atualizado com susseso'))
