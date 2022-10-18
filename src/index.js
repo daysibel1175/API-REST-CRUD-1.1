@@ -1,9 +1,10 @@
 const express = require("express");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 require("dotenv").config();
-const trilhasRoutes = require("./routes/trilhas")
+const trilhasRoutes = require("./routes/trilhas");
 const guia = require('./routes/guias.js');
 const grupo = require("./routes/grupo");
+const usuario = require('./routes/usuario');
 
 const app = express();
 const port = process.env.PORT || 9000;
@@ -11,11 +12,17 @@ const port = process.env.PORT || 9000;
 //middleware
 app.use(express.json());
 app.use("/trilhasbrasil.com", trilhasRoutes);
-app.use('/TRILHASBRASIL.COM', guia);
-app.use('/TRILHASBRASIL.COM', grupo);
+app.use('/trilhasbrasil.com', guia);
+app.use('/trilhasbrasil.com', grupo);
+app.use("/trilhasbrasil.com", usuario)
 
 //routes 
 
+app.use((req, res) => {
+const error = new Error 
+error.status = 404
+res.status(404).send('Opa! Essa rota não existe')
+})
 app.get('/', (req, res) => {
     res.send("Welcome to my API");
 });

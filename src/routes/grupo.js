@@ -1,6 +1,10 @@
 
+const { json } = require("express");
 const express = require("express");
-const grupo = require("../models/grupo.js")
+const { ConnectionStates } = require("mongoose");
+const { populate} = require("../models/grupo.js");
+const grupo = require("../models/grupo.js");
+const usuario = require("../models/usuario.js");
 const router = express.Router();
 
 
@@ -9,15 +13,17 @@ const router = express.Router();
 router.post("/grupo/insert", (req, res) =>{
     try{
     const grupos = grupo(req.body);
-    const pessoa = req.body.pessoa1
-    const pessoa2 = req.body.pessoa2
-    if(!pessoa){ res.status(422).json('O campo pessoa ainda nao foi preenchido')
+    const {guia, usuario, familiar }= req.body
+    if(!guia || typeof nome == "number"){res.status(422).json('Opa! Ainda não sabe quem é seu guia, Porfavor veja os dados nas informaçoes da trilha que vc ira participar')
+       return}
+    if(!familiar){ res.status(422).json('Viaja sozinho ou em familia?')
       return}
-    if(!pessoa2){ res.status(422).json('Precisa mais de uma pessoa para o grupo ser validado')
+    if(!usuario){ res.status(422).json('O grupo ainda nao tem nenhuma pessoa')
       return}
-    grupos
+      Array.prototype.push.apply(usuario);
+        grupos
        .save()
-       .then((data) => res.status(201).send(data + 'Dados inseridos com susseso!!' ))
+       .then((data) => res.status(201).send(data + ' Dados inseridos com sucesso!!' ))
        .catch((error) => res.status(400).json({ message: error}))
     }catch(error){
         res.status(500).send('Erro do servidor')
@@ -30,6 +36,7 @@ router.get("/grupo/read", (req, res) => {
   try{
     grupo
     .find()
+    .populate({path: 'usuario', select: 'nome'})
     .then((data) => res.status(200).json((data)))
     .catch((error) => res.status(404).json({ message: error }))
   }catch(error){
@@ -42,11 +49,12 @@ router.get("/grupo/read", (req, res) => {
 router.get('/grupo/read/:id', (req, res) => {
     try{
       const { id } = req.params;
-      if(!id) return res.status(404).send({ error: 'Grupo não encontrado'})
+      if(!id) return res.status(400).send({ error: 'O id ainda não foi inserido'})
       grupo
       .findById(id)
+      .populate('usuario')
       .then((data) => res.status(200).send(data))
-      .catch((error) => res.status(404).json({message: error + 'Ups! Não foi possivel encontrar esse Id'}))
+      .catch((error) => res.status(404).send('Ups! O grupo não existe'))
     }catch(error){
       res.status(500).send('Erro do servidor')
       console.error({ error: error })
@@ -57,46 +65,17 @@ router.get('/grupo/read/:id', (req, res) => {
 router.patch('/grupo/update/:id', (req, res) => {
     try {
       const { id } = req.params;
-      const dados = (req.body);
-  
+      const dados = req.body
       grupo
       .updateOne({ _id: id }, { $set: dados })
-      .then((data) => res.status(200).json(data + 'Atualizado com susseso'))
-      .catch((error) => res.status(304).json({message: error + 'Nao foi possivel fazer atualizacao dos dados! O ID não existe'}))
-    
+      .then((data) => res.status(200).send('Dados do grupo foram atualizado com sucesso'))
+      .catch((error) => res.status(304).json({message: error + 'Nao foi possivel fazer atualizacao dos dados! O grupo nao existe'}))
+      console.log(dados)
     } catch (error) {
       res.status(500).send('Erro do servidor')
-      console.error({ error: error })
+      console.error({ error: error }) 
     }
-  
   });
-
-    // Update - atualizar dados
-router.put('/grupo/update/:id', (req, res) => {
-  try {
-    const { id } = req.params;
-    const dados = (req.body);
-    const turma = req.body.grupo
-    const pessoa = req.body.pessoa1;
-    const pessoa2 = req.body.pessoa2
-
-    if(!pessoa){ res.status(422).json('O campo pessoa ainda nao foi preenchido')
-    return}
-    if(!pessoa2){ res.status(422).json('Precisa mais de uma pessoa para o grupo ser validado')
-    return}
-    if(!turma){ res.status(422).json('O numero do grupo ainda nao foi preenchido')
-    return}
-    grupo
-    .updateOne({ _id: id }, { $set: dados })
-    .then((data) => res.status(200).json(data + 'Atualizado com susseso'))
-    .catch((error) => res.status(304).json({message: error + 'Nao foi possivel fazer atualizacao dos dados! O ID não existe'}))
-  
-  } catch (error) {
-    res.status(500).send('Erro do servidor')
-    console.error({ error: error })
-  }
-
-});
 
   //Delete - deletar dados do banco de dados 
 router.delete("/grupo/delete/:id", (req, res) => {
@@ -104,7 +83,7 @@ router.delete("/grupo/delete/:id", (req, res) => {
     const { id } = req.params;
     grupo
       .deleteOne({ _id: id })
-      .then((data) => res.status(200).json(data + 'Deletado com susseso!!'))
+      .then((data) => res.status(200).json('grupo deletado com sucesso!!'))
       .catch((error) => res.status(400).json({ message: error + 'Error ao deletar os dados selecionados, ID ainda nao foi inserido ou ID invalido'}))
     }catch(error){
       res.status(500).send('Erro do servidor')

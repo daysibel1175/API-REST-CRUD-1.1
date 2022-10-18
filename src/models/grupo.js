@@ -1,23 +1,24 @@
 const mongoose = require("mongoose");
 
 const grupo = mongoose.Schema({
-   grupo:{
-    type: Number,
-    required: true
+   // O GUIA DA TRILHA
+   guia:{
+    type: mongoose.Types.ObjectId,
+    ref: 'guia',
+    autopopulate: true
    },
-   pessoa1: {
-      type: String, Number,
-      required: true
+   // PARA SABER SI O GRUPO SERA DE UMA FAMILIA E TERÁ CRIANÇAS
+   familiar:{
+   type: Boolean,
+   required: true
    },
-   pessoa2: {
-    type: String, Number,
-    required: true
- },
-   pessoa3: {
-    type: String, Number,
-    required: false
- }
-
+   // OS USUARIOS DA TRILHA
+   usuario:[{
+      type: mongoose.Types.ObjectId,
+      ref: 'usuario',
+      autopopulate: true
+   },],
+   
 });
 
 module.exports = mongoose.model('grupo', grupo)
