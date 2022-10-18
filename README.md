@@ -1,7 +1,5 @@
 # API-REST-CRUD-1.1
 
-<img src="C:\Users\daysi\Downloads\ICONO TRILHASBRASIL" alt="My cool logo"/>
-
 ##Bem-vindo ao repositório oficial de TRILHASBRASIL!
 
 TRILHASBRASIL é uma API REST implementada com operações CRUD .
