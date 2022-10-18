@@ -11,24 +11,26 @@ const trilhasSchema = mongoose.Schema({
  },
  descricao:{
     type: String,
-    required:true
+    required:false
  },
  localizacao:{
     type:String,
-    required: false
+    required: true
  },
  dica: {
    type: String,
    required: false
 },
+// O GUIA RESPONSAVEL NA TRILHA
  guia:[{
    type: mongoose.Types.ObjectId,
    ref: 'guias',
    autopopulate: true
 },],
- equipamento: [{
+// GRUPO QUE IRA PERCORRER A TRILHA
+ grupo: [{
    type: mongoose.Types.ObjectId,
-   ref: 'Equipamento',
+   ref: 'grupo',
    autopopulate: true
 },],
 });
