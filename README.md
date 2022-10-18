@@ -34,7 +34,7 @@ npm run dev
 
 **Sobre nós**
 
-O desenvolvimento de TRILHASBRASIL é liderado pelo grupo de desenvolvedores de Back-end da Toti
+O desenvolvimento de TRILHASBRASIL é liderado pelo grupo de desenvolvedores de Back-end.
 
 # Autores
 
