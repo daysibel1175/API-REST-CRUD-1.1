@@ -30,7 +30,7 @@ router.get("/guias/read", (req, res) => {
   try{
     guia
     .find()
-    .populate({path: 'Trilha', select: 'nome'})
+    .populate({path: 'trilha', select: 'nome'})
     .populate({path: 'grupo', select: 'nome'})
     .then((data) => res.status(200).json((data)))
     .catch((error) => res.status(404).json({ message: error }))
@@ -47,8 +47,8 @@ router.get('/guias/read/:id', (req, res) => {
     if(!id) return res.status(400).send({ error: 'Id ainda nao foi inserido'})
     guia
     .findById(id)
-    .populate(grupo)
-    .populate({path:'Trilha', select:'nome'})
+    .populate('grupo')
+    .populate({path:'trilha', select:'nome'})
     .then((data) => res.status(200).send(data))
     .catch((error) => res.status(404).json({message: error + 'Guia não foi encontrado'}))
   }catch(error){
@@ -62,7 +62,11 @@ router.patch('/guias/update/:id', (req, res) => {
   try {
     const { id } = req.params;
     const dados = (req.body);
-
+    if(typeof req.body.nome == 'number'){ res.status(422).json('O nome não pode ser numeros')
+      return}
+    if(typeof req.body.contato == 'string'){ res.status(422).json('O contato não pode ser string')
+      return}
+    
     guia
     .updateOne({ _id: id }, { $set: dados })
     .then((data) => res.status(200).send('Dados do guia atualizado com sucesso'))
