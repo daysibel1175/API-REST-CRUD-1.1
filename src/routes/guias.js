@@ -47,7 +47,7 @@ router.get('/guias/read/:id', (req, res) => {
     if(!id) return res.status(400).send({ error: 'Id ainda nao foi inserido'})
     guia
     .findById(id)
-    .populate(grupo)
+    .populate('grupo')
     .populate({path:'trilha', select:'nome'})
     .then((data) => res.status(200).send(data))
     .catch((error) => res.status(404).json({message: error + 'Guia não foi encontrado'}))
