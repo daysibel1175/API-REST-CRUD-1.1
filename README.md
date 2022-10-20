@@ -21,9 +21,7 @@ npm run dev
 - Este comando iniciará o servidor da API para logo se conectar al banco de dados. Depois de fazer a conexão a API fica pronta para o uso.
 - En caso de precisar instalar o nomedemon usar o comando
 
-```bash
-npm i nodemon
-```
+ **npm i nodemon**
 
 <hr>
 ## ✔️ Técnicas e Tecnologias utilizadas na API
