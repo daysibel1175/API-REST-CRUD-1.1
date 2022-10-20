@@ -3,7 +3,7 @@
 <img src="https://github.com/daysibel1175/API-REST-CRUD-1.1/blob/main/icono%20da%20API.png" alt="My cool logo"/>
 
 
-## Bem-vindo ao repositório oficial de TRILHASBRASIL!
+## Bem-vindo ao repository oficial de TRILHASBRASIL!
 
 TRILHASBRASIL é uma API REST implementada com operações CRUD .
 
