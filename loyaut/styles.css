@@ -1,0 +1,79 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body,
+input,
+button,
+select,
+textarea {
+  font-family: "Heebo", sans-serif;
+}
+body {
+  background-color: white;
+}
+header {
+  height: 80px;
+}
+header #navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  max-width: 75rem;
+  margin: 3rem auto;
+  height: 7rem;
+  border-radius: 0.18rem;
+  background-color: rgb(41, 141, 41);
+}
+header #navbar #menu {
+  display: none;
+}
+header #navbar #nav-image {
+}
+header #navbar #nav-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+header .nav-item a {
+  text-decoration: none;
+  color: white;
+  padding: 0.3rem;
+  font-size: 1, 5rem;
+  font-weight: 500;
+}
+.nav-item a:hover {
+  color: rgb(197, 250, 204);
+  transition: color 0.3s;
+  border: 0.05rem outset rgb(15, 58, 6);
+  border-radius: 0,20rem;
+}
+
+/* section trilhasbrasil */
+main{
+    margin-top: 6rem;
+}
+main .tb{
+display: flex;
+max-width: 75rem;
+padding: 0 2rem;
+margin: 0 auto;
+background-color: rgb(41, 141, 41);
+color:white;
+align-items: center;
+flex-direction: column;
+border-radius: 0.18rem;
+
+}
+main .tb h1{
+padding: 2rem;
+font-weight: 700;
+}
+main .tb p{
+line-height: 1rem;
+max-width: 31.25rem;
+margin-bottom: 3rem;
+}
