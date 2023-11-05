@@ -46,3 +46,19 @@ input:focus:invalid{
 width: 6.25rem;
 background-color: rgb(49, 235, 58);
 }
+.formulario2{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+    max-width: 20rem;
+    margin: 15% auto;
+    border: 0.1rem ;
+    border-radius: 1rem;
+    background: linear-gradient(rgb(117, 223, 96),rgb(41, 200, 81), rgb(192, 255, 208))
+}
+.dadosUsuario{
+    width:12.5rem;
+    border-radius: 0.38rem;
+    margin: 0.3rem 0 1rem 0;
+}
