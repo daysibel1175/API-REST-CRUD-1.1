@@ -1,0 +1,48 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body,
+input,
+button,
+select,
+textarea {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, sans-serif;
+}
+body {
+  background: linear-gradient( rgb(41, 141, 41), rgb(41, 200, 81))
+  rgb(154, 231, 177);
+}
+.formulario1{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+    max-width: 20rem;
+    margin: 15% auto;
+    border: 0.1rem ;
+    border-radius: 1rem;
+    background: linear-gradient(rgb(117, 223, 96),rgb(41, 200, 81), rgb(192, 255, 208))
+}
+.dadosUsuario{
+    width:12.5rem;
+    border-radius: 0.38rem;
+    margin: 0.3rem 0 1rem 0;
+}
+input:invalid{
+    border-color: rgb(231, 7, 52);
+    box-shadow: 0px 0px 3pxrgb(231, 7, 52);
+}
+input:focus{
+    outline: none;
+}
+input:focus:invalid{
+    box-shadow: none;
+}
+#error-email{
+    color:rgb(231, 7, 52);
+}
+#botão{
+width: 6.25rem;
+background-color: rgb(49, 235, 58);
+}

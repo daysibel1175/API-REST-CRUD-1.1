@@ -21,7 +21,7 @@ header #navbar {
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  max-width: 75rem;
+  max-width: 65rem;
   margin: 3rem auto;
   height: 7rem;
   border-radius: 0.18rem;
@@ -31,6 +31,7 @@ header #navbar #menu {
   display: none;
 }
 header #navbar #nav-image {
+  border-radius: 3rem;
 }
 header #navbar #nav-list {
   list-style: none;
@@ -58,7 +59,7 @@ main{
 }
 main .tb{
 display: flex;
-max-width: 75rem;
+max-width: 65rem;
 padding: 0 2rem;
 margin: 0 auto;
 background-color: rgb(41, 141, 41);
@@ -66,14 +67,14 @@ color:white;
 align-items: center;
 flex-direction: column;
 border-radius: 0.18rem;
-
 }
 main .tb h1{
 padding: 2rem;
 font-weight: 700;
 }
 main .tb p{
-line-height: 1rem;
+line-height: 1.5rem;
 max-width: 31.25rem;
 margin-bottom: 3rem;
 }
+

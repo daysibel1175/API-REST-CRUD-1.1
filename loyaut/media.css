@@ -1,7 +1,33 @@
-/* @media (max-width: 1024px)
-.bar-top .bars {
-    display: block;
-    padding: 4px;
-    cursor: pointer;
-    margin-left: -4px;
-} */
+@media (max-width: 920px) {
+    header #navbar #menu{
+        display: block;
+        width: 4rem;
+        height: 4rem;
+        padding: 0;
+        margin: 0;
+          }
+          header #navbar {
+            max-width: inherit;
+            margin: auto;
+          }
+    header #navbar #nav-image {
+        display: inline;
+        
+      }
+      header .nav-item a {
+      display: none;
+      }
+      main .tb{
+        max-width: inherit;
+        margin: auto;
+      }
+  }
+  
+  @media (max-width: 740px) {
+    .post-cards {
+      flex-direction: column;
+    }
+    header #navbar #nav-image {
+      display: none;
+    }
+  }
