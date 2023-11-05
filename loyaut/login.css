@@ -46,6 +46,7 @@ input:focus:invalid{
 width: 6.25rem;
 background-color: rgb(49, 235, 58);
 }
+/* formulario de cadastro */
 .formulario2{
     display: flex;
     align-items: center;
