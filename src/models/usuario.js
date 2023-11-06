@@ -11,11 +11,15 @@ const usuario = mongoose.Schema({
    },
    contato: {
       type: Number,
-      required: false
+      required: true
    },
    email: {
       type: String,
-      required: false
+      required: true
+   },
+   senha: {
+      type:String,
+      required: true
    },
    // GRUPO AO QUE O USUARIO PERTECE
    grupo:{

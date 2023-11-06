@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/usuario/insert", (req, res) => {
   try {
     const usuario = Usuario(req.body);
-    const { nome, idade, contato, email } = req.body;
+    const { nome, idade, contato, email, senha } = req.body;
     if (!nome || typeof nome == "number") {
       res.status(422).json("O nome é obrigatorio");
       return;
@@ -29,6 +29,12 @@ router.post("/usuario/insert", (req, res) => {
       res
         .status(422)
         .json("Precisamos de seu email para enviar os dados da trilha");
+      return;
+    }
+    if ((idade >= 18) & !senha || senha.length <= 4) {
+      res
+        .status(422)
+        .json("Por favor insira a Senha para seu cadastro");
       return;
     }
     usuario
