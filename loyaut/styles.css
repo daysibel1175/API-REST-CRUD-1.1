@@ -27,7 +27,7 @@ header #navbar {
   border-radius: 0.18rem;
   background-color: rgb(41, 141, 41);
 }
-header #navbar #menu {
+header #navbar .menu {
   display: none;
 }
 header #navbar #nav-image {
