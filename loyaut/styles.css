@@ -11,7 +11,7 @@ textarea {
   font-family: "Heebo", sans-serif;
 }
 body {
-  background-color: rgb(68, 30, 30);
+  background-color: rgb(213, 249, 213);
 }
 header {
   height: 80px;
@@ -25,7 +25,7 @@ header #navbar {
   margin: 3rem auto;
   height: 7rem;
   border-radius: 0.18rem;
-  background-color: rgb(41, 141, 41);
+  background-color: none;
 }
 header #navbar .menu {
   display: none;
@@ -41,16 +41,16 @@ header #navbar #nav-list {
 }
 header .nav-item a {
   text-decoration: none;
-  color: white;
-  padding: 0.3rem;
+  color: rgb(107, 153, 64);
+  padding: 0.3rem 0.9rem;
   font-size: 1, 5rem;
   font-weight: 500;
 }
 .nav-item a:hover {
-  color: rgb(197, 250, 204);
+  color: rgb(21, 72, 28);
   transition: color 0.3s;
-  border: 0.05rem outset rgb(15, 58, 6);
-  border-radius: 0,20rem;
+  border: 0.01rem outset  rgb(218, 249, 181);
+  border-radius: 0.6rem;
 }
 
 /* section trilhasbrasil */
