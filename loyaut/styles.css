@@ -55,7 +55,7 @@ header .nav-item a {
 
 /* section trilhasbrasil */
 main{
-    margin-top: 6rem;
+    margin: 6rem 6rem;
 }
 main .tb{
 display: flex;
