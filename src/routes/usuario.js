@@ -6,32 +6,32 @@ const Usuario = require("../models/usuario");
 
 const router = express.Router();
 
-// Create - Inserir novos dados ao banco de dados
-router.post("/usuario/insert", (req, res) => {
+// Create - Inserir novos dados ao banco 
+ const cadastro = router.post("/usuario/insert", (req, res) => {
   try {
     const usuario = Usuario(req.body);
-    const { nome, idade, contato, email, senha } = req.body;
+    const { nome, dataDeNascimento, contato, email, senha } = req.body;
     if (!nome || typeof nome == "number") {
       res.status(422).json("O nome é obrigatorio");
       return;
     }
-    if (!idade || typeof idade == "string") {
-      res.status(422).json("É obrigatorio preencher o campo idade");
+    if (!dataDeNascimento || typeof dataDeNascimento == "string") {
+      res.status(422).json("É obrigatorio preencher o campo Data de Nascimento");
       return;
     }
-    if ((idade >= 18) & !contato || typeof contato == "string") {
+    if ((dataDeNascimento >= 2005) & !contato || typeof contato == "string") {
       res
         .status(422)
         .json("Para sua segurança é obrigatorio preencher o campo contato");
       return;
     }
-    if ((idade >= 18) & !email || typeof email == "number") {
+    if ((dataDeNascimento >= 2005) & !email || typeof email == "number") {
       res
         .status(422)
         .json("Precisamos de seu email para enviar os dados da trilha");
       return;
     }
-    if ((idade >= 18) & !senha || senha.length <= 4) {
+    if ((dataDeNascimento >= 2005) & !senha || senha.length <= 4) {
       res
         .status(422)
         .json("Por favor insira a Senha para seu cadastro");

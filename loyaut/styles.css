@@ -11,7 +11,7 @@ textarea {
   font-family: "Heebo", sans-serif;
 }
 body {
-  background-color: rgb(213, 249, 213);
+  background-color: rgb(77, 188, 77);
 }
 header {
   height: 80px;
@@ -27,13 +27,13 @@ header #navbar {
   border-radius: 0.18rem;
   background-color: none;
 }
-header #navbar .menu {
+header #menu{
   display: none;
 }
 header #navbar #nav-image {
   border-radius: 3rem;
 }
-header #navbar #nav-list {
+header #navbar .nav-list {
   list-style: none;
   display: flex;
   align-items: center;
@@ -41,7 +41,7 @@ header #navbar #nav-list {
 }
 header .nav-item a {
   text-decoration: none;
-  color: rgb(107, 153, 64);
+  color: rgb(243, 245, 241);
   padding: 0.3rem 0.9rem;
   font-size: 1, 5rem;
   font-weight: 500;
@@ -49,7 +49,7 @@ header .nav-item a {
 .nav-item a:hover {
   color: rgb(21, 72, 28);
   transition: color 0.3s;
-  border: 0.01rem outset  rgb(218, 249, 181);
+  border: 0.01rem outset  rgb(77, 188, 77);
   border-radius: 0.6rem;
 }
 
@@ -59,22 +59,22 @@ main{
 }
 main .tb{
 display: flex;
-max-width: 65rem;
-padding: 0 2rem;
+max-width: 64rem;
 margin: 0 auto;
-background-color: rgb(41, 141, 41);
-color:white;
+background-color: #ffffff;
+color: rgb(107, 153, 64);
 align-items: center;
 flex-direction: column;
-border-radius: 0.18rem;
+border-radius: 3rem;
 }
 main .tb h1{
-padding: 2rem;
+padding: 2rem 0rem;
 font-weight: 700;
 }
 main .tb p{
 line-height: 1.5rem;
-max-width: 31.25rem;
+max-width: 30rem;
 margin-bottom: 3rem;
+padding: 2rem;
+word-wrap: break-word;
 }
-

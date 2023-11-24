@@ -42,7 +42,7 @@ input:focus:invalid{
 #error-email{
     color:rgb(231, 7, 52);
 }
-#botão{
+#btn{
 width: 6.25rem;
 background-color: rgb(49, 235, 58);
 }

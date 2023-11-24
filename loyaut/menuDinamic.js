@@ -1,6 +1,12 @@
-const prompt = prompt()
-const buttonDinamic = document.getElementById("menu") 
+console.log("hello");
 
-buttonDinamic.addEventListener('click', () => {
-    buttonDinamic.classList.toggle('close')
-})
+
+const menu = document.getElementById("myDropdown")
+console.log(menu)
+
+const btn = document.getElementById('menu');
+
+btn.onclick = () => {
+  menu.classList.toggle('show')
+}
+

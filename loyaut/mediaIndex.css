@@ -1,33 +1,130 @@
 @media (max-width: 920px) {
-  header #navbar .menu {
-    display: block;
+  header {
+    margin: 3rem auto;
+  }
+  header #navbar {
+    width: 45rem;
+    padding: 0;
+    justify-content: space-between;
+    position: relative;
+    margin: 0 auto;
+  }
+  header #navbar #menu {
+    display: flex;
     width: 6rem;
     height: 4rem;
     padding: 0;
-    margin: 0;
-    cursor:pointer;
+    cursor: pointer;
+    user-select: none;
+    justify-content: end;
+    gap: 1rem;
   }
-  header #navbar {
-    max-width: inherit;
-    margin: auto;
+
+  header #navbar .nav-list {
+    flex-direction: column;
+    min-height: 100px;
+    position: absolute;
+    top: calc(6rem + 0.5rem);
+    width: 12rem;
+    background-color: rgb(255, 254, 254);
+    user-select: none;
+    right: 0;
+    padding: 1rem 0;
+    border-radius: 1rem;
+    transform: translateY(0.5rem);
+    visibility: hidden;
+    opacity: 0;
   }
-  header #navbar #nav-image {
-    display: inline;
+  header #navbar .nav-list.show {
+    transform: translateY(0rem);
+    visibility: visible;
+    opacity: 1;
   }
-  header .nav-item a {
-    display: none;
+  header #navbar .nav-list .nav-item a {
+    color: rgb(107, 153, 64);
+  }
+
+  header #navbar .nav-list::before {
+    content: "";
+    position: absolute;
+    top: -0.5rem;
+    right: 100;
+    width: 1.2rem;
+    height: 1.2rem;
+    background-color: rgb(255, 253, 253);
+    transform: rotate(45deg);
+    z-index: -1;
+    right: 0;
+    left: 8.4rem;
   }
   main .tb {
-    max-width: inherit;
+    max-width: 45rem;
     margin: auto;
   }
 }
-
 @media (max-width: 740px) {
   .post-cards {
     flex-direction: column;
   }
+  header #navbar {
+    width: 28rem;
+    padding: 0;
+    position: relative;
+    justify-content: end;
+  }
+  header #navbar #menu {
+    display: flex;
+    width: 6rem;
+    height: 4rem;
+    padding: 0;
+    cursor: pointer;
+    user-select: none;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  header button {
+    border: none;
+    background-color: transparent;
+  }
+  header #navbar .nav-list {
+    flex-direction: column;
+    position: absolute;
+    top: calc(6rem + 0.5rem);
+    width: 28rem;
+    height: 22.5rem;
+    background-color: rgb(255, 255, 255);
+    user-select: none;
+    right: 0;
+    line-height: 1rem;
+    border-radius: 1rem;
+    text-align: center;
+  }
+  header #navbar .nav-list .nav-item a {
+    color: rgb(58, 118, 58);
+    display: block;
+    padding: 2rem;
+  }
+  a #login {
+    padding: 0;
+    margin: 0;
+  }
+  header #navbar .nav-list::before {
+    content: "";
+    position: absolute;
+    top: -0.5rem;
+    right: 100;
+    width: 1.2rem;
+    height: 1.2rem;
+    background-color: rgb(255, 255, 255);
+    transform: rotate(45deg);
+    z-index: 0;
+    left: 24.4rem;
+  }
   header #navbar #nav-image {
     display: none;
+  }
+  main .tb {
+    max-width: 28rem;
+    margin: auto;
   }
 }
