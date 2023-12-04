@@ -68,13 +68,12 @@ flex-direction: column;
 border-radius: 3rem;
 }
 main .tb h1{
-padding: 2rem 0rem;
+padding: 1rem 0rem;
 font-weight: 700;
 }
 main .tb p{
 line-height: 1.5rem;
-max-width: 30rem;
-margin-bottom: 3rem;
-padding: 2rem;
+margin-bottom: 0.5rem;
+padding: 1rem;
 word-wrap: break-word;
 }

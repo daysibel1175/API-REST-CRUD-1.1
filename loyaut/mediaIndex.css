@@ -3,7 +3,7 @@
     margin: 3rem auto;
   }
   header #navbar {
-    width: 45rem;
+    width: 48rem;
     padding: 0;
     justify-content: space-between;
     position: relative;
@@ -63,11 +63,9 @@
   }
 }
 @media (max-width: 740px) {
-  .post-cards {
-    flex-direction: column;
-  }
+
   header #navbar {
-    width: 28rem;
+    width: 30rem;
     padding: 0;
     position: relative;
     justify-content: end;
@@ -124,7 +122,13 @@
     display: none;
   }
   main .tb {
+    font-size:small;
     max-width: 28rem;
     margin: auto;
+    padding: 1rem;
+  }
+  main .tb h1{
+    padding: 1rem;
+
   }
 }
