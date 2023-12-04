@@ -1,6 +1,6 @@
 @media (max-width: 920px) {
   header {
-    margin: 3rem auto;
+    margin: 1rem auto;
   }
   header #navbar {
     width: 48rem;
@@ -58,8 +58,8 @@
     left: 8.4rem;
   }
   main .tb {
-    max-width: 45rem;
-    margin: auto;
+    max-width: 48rem;
+    margin: 0 auto;
   }
 }
 @media (max-width: 740px) {
@@ -123,12 +123,13 @@
   }
   main .tb {
     font-size:small;
+    width: 22rem;
     max-width: 28rem;
-    margin: auto;
-    padding: 1rem;
+    margin:0 auto;
+    padding: 0rem;
+    margin-left: -2rem;
   }
   main .tb h1{
     padding: 1rem;
-
   }
 }
