@@ -18,13 +18,18 @@ app.use("/trilhasbrasil.com", usuario)
 
 //routes 
 
+app.get('/', (req, res) => {
+    res.send("Welcome to my API");
+});
+
+app.get('/teste', (req, res) => {
+    res.send("Aplicacion OK");
+});
+
 app.use((req, res) => {
 const error = new Error 
 error.status = 404
 res.status(404).send('Opa! Essa rota não existe')
-})
-app.get('/', (req, res) => {
-    res.send("Welcome to my API");
 });
 
 //mongoose connection
