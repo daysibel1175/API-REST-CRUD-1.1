@@ -1,0 +1,11 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix react-app"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

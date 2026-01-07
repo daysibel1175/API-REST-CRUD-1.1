@@ -19,19 +19,36 @@ A API é escrita em JavaScript, uma linguagem de programação dinâmica e poder
 Com essa configuração, a API está pronta para oferecer uma interface de programação de aplicações robusta, eficiente e fácil de usar, permitindo a integração com outras aplicações e sistemas.
 <hr>
 
-**Instalação**
+**Instalação e Execução (Monorepo)**
 
-- Deverá ser usado um editor de código, depois de ter clonado o projeto, posteriormente executar o comando:
+1) Configurar variáveis de ambiente:
+
+Crie um arquivo `.env` na pasta raiz com:
+
+```bash
+cp .env.example .env
+# Edite e defina KEY_URI com a sua Connection String do MongoDB Atlas
+```
+
+2) Instalar dependências do monorepo:
+
+```bash
+npm install
+```
+
+3) Rodar Backend e Frontend juntos:
 
 ```bash
 npm run dev
 ```
 
-- Este comando iniciará o servidor da API para logo se conectar al banco de dados. Depois de fazer a conexão a API fica pronta para o uso.
-- En caso de precisar instalar o nomedemon usar o comando
+- Backend: http://localhost:9000
+- Frontend: http://localhost:3000 (abrirá automaticamente em `loyaut/index.html`)
 
- ```bash
-npm i nodemon
+4) Popular o banco (opcional):
+
+```bash
+npm run seed
 ```
 
 <hr>
