@@ -1,22 +1,28 @@
-import { useEffect, useState } from 'react'
-import { fetcher } from '../services/api'
+import { useEffect, useState } from "react";
+import { fetcher } from "../services/api";
 
 export default function UsuariosPage() {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    let mounted = true
-    fetcher('/usuarios')
-      .then((res) => { if (mounted) { setData(res); } })
-      .catch((err) => setError(err.message || 'Erro ao carregar'))
-      .finally(() => setLoading(false))
-    return () => { mounted = false }
-  }, [])
+    let mounted = true;
+    fetcher("/usuarios")
+      .then((res) => {
+        if (mounted) {
+          setData(res);
+        }
+      })
+      .catch((err) => setError(err.message || "Erro ao carregar"))
+      .finally(() => setLoading(false));
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-  if (loading) return <p>Carregando usuários...</p>
-  if (error) return <p>Erro: {error}</p>
+  if (loading) return <p>Carregando usuários...</p>;
+  if (error) return <p>Erro: {error}</p>;
 
   return (
     <section>
@@ -33,5 +39,5 @@ export default function UsuariosPage() {
         </ul>
       )}
     </section>
-  )
+  );
 }

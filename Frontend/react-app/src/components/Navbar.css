@@ -9,6 +9,15 @@
 .navbar__brand {
   font-weight: 700;
   color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.navbar__brandLogo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: inline-block;
 }
 .navbar__links {
   display: flex;

@@ -8,7 +8,7 @@ const TrilhaSchema = new mongoose.Schema(
     localizacao: { type: String },
     dica: { type: String },
     guia: [{ type: mongoose.Schema.Types.ObjectId, ref: "Guia" }],
-    grupo: [{ type: mongoose.Schema.Types.ObjectId, ref: "Grupo" }]
+    grupo: [{ type: mongoose.Schema.Types.ObjectId, ref: "Grupo" }],
   },
   { timestamps: true }
 );

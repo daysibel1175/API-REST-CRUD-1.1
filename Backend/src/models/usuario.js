@@ -6,7 +6,7 @@ const UsuarioSchema = new mongoose.Schema(
     idade: { type: Number, required: true },
     contato: { type: Number, required: true },
     email: { type: String, required: true, unique: true },
-    grupo: { type: mongoose.Schema.Types.ObjectId, ref: "Grupo" }
+    grupo: { type: mongoose.Schema.Types.ObjectId, ref: "Grupo" },
   },
   { timestamps: true }
 );
