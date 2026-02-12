@@ -1,28 +1,24 @@
+import img from "../../dist/legacy-images/imgTrilha.jpg";
 export default function HomePage() {
   return (
     <section>
       <header
         style={{
           padding: "2rem 1rem",
-          border: "1px solid var(--color-border)",
-          borderRadius: 12,
           background: "var(--color-bg)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
         }}
       >
         <img
-          src="/legacy-images/icono%20da%20API.png"
-          alt="Trilhas Brasil"
-          style={{
-            width: "min(70vw, 320px)",
-            height: "auto",
-            maxHeight: 380,
-            objectFit: "contain",
-            display: "block",
-          }}
+          src={img}
+          alt="Logo"
+          style={{ width: "96%", height: "96%", objectFit: "contain" }}
         />
+        <h1 style={{ marginTop: "1rem", color: "var(--color-text)" }}>
+          Bem-vindo(a) ao Trilhas Brasil
+        </h1>
+        <p style={{ color: "var(--color-muted)" }}>
+          Use o menu para navegar entre Trilhas, Guias, Grupos e Usuários.
+        </p>
       </header>
     </section>
   );
