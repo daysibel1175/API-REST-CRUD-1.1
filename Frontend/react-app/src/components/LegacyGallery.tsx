@@ -1,9 +1,10 @@
 export default function LegacyGallery() {
-  const images = [
+  const images: string[] = [
     "/legacy-images/fotodedaysibel.jpg",
     "/legacy-images/fotodericardo.jpg",
     "/legacy-images/fotodewilfried.jpg",
   ];
+
   return (
     <div
       style={{

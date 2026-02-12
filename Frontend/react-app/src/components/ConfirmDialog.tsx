@@ -1,4 +1,15 @@
+import { MouseEvent } from "react";
 import Button from "./Button";
+
+interface ConfirmDialogProps {
+  isOpen: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+  title?: string;
+  message?: string;
+  confirmText?: string;
+  cancelText?: string;
+}
 
 export default function ConfirmDialog({
   isOpen,
@@ -8,7 +19,7 @@ export default function ConfirmDialog({
   message,
   confirmText = "Confirmar",
   cancelText = "Cancelar",
-}) {
+}: ConfirmDialogProps) {
   if (!isOpen) return null;
 
   return (
@@ -39,7 +50,7 @@ export default function ConfirmDialog({
           border: "1px solid var(--color-border)",
           position: "relative",
         }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
         <h2 style={{ margin: "0 0 1rem 0", color: "var(--color-text)" }}>
           {title}

@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent, MouseEvent } from "react";
 import { createUsuario, getUsuarioByEmail } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
-export default function LoginModal({ isOpen, onClose }) {
+interface LoginModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+interface LoginForm {
+  nome: string;
+  idade: string;
+  contato: string;
+  email: string;
+}
+
+export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { login } = useAuth();
-  const [isRegistering, setIsRegistering] = useState(false);
-  const [error, setError] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState({
+  const [isRegistering, setIsRegistering] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [form, setForm] = useState<LoginForm>({
     nome: "",
     idade: "",
     contato: "",
@@ -16,18 +28,18 @@ export default function LoginModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const handleReset = () => {
+  const handleReset = (): void => {
     setForm({ nome: "", idade: "", contato: "", email: "" });
     setError(null);
     setIsRegistering(false);
   };
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     handleReset();
     onClose();
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError(null);
     setSaving(true);
@@ -57,7 +69,7 @@ export default function LoginModal({ isOpen, onClose }) {
         handleReset();
         onClose();
       }
-    } catch (err) {
+    } catch (err: any) {
       const message = isRegistering
         ? "Error al registrar"
         : "Error al iniciar sesión";
@@ -95,7 +107,7 @@ export default function LoginModal({ isOpen, onClose }) {
           border: "1px solid var(--color-border)",
           position: "relative",
         }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
         <button
           onClick={handleClose}
@@ -124,7 +136,9 @@ export default function LoginModal({ isOpen, onClose }) {
               type="email"
               placeholder="Email"
               value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setForm({ ...form, email: e.target.value })
+              }
               style={{
                 width: "100%",
                 padding: "0.5rem",
@@ -144,7 +158,9 @@ export default function LoginModal({ isOpen, onClose }) {
                   required
                   placeholder="Nombre"
                   value={form.nome}
-                  onChange={(e) => setForm({ ...form, nome: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setForm({ ...form, nome: e.target.value })
+                  }
                   style={{
                     width: "100%",
                     padding: "0.5rem",
@@ -162,7 +178,9 @@ export default function LoginModal({ isOpen, onClose }) {
                   type="number"
                   placeholder="Edad"
                   value={form.idade}
-                  onChange={(e) => setForm({ ...form, idade: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setForm({ ...form, idade: e.target.value })
+                  }
                   style={{
                     width: "100%",
                     padding: "0.5rem",
@@ -180,7 +198,7 @@ export default function LoginModal({ isOpen, onClose }) {
                   type="number"
                   placeholder="Contacto"
                   value={form.contato}
-                  onChange={(e) =>
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     setForm({ ...form, contato: e.target.value })
                   }
                   style={{
@@ -214,8 +232,8 @@ export default function LoginModal({ isOpen, onClose }) {
               {saving
                 ? "Procesando..."
                 : isRegistering
-                ? "Registrar"
-                : "Iniciar sesión"}
+                  ? "Registrar"
+                  : "Iniciar sesión"}
             </button>
             <button
               type="button"
@@ -239,7 +257,7 @@ export default function LoginModal({ isOpen, onClose }) {
             onClick={() => {
               setIsRegistering(!isRegistering);
               setError(null);
-              setForm({ nome: "", edad: "", contato: "", email: form.email });
+              setForm({ nome: "", idade: "", contato: "", email: form.email });
             }}
             style={{
               width: "100%",

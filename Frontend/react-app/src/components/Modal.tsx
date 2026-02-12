@@ -1,13 +1,25 @@
+import { ReactNode, MouseEvent, CSSProperties } from "react";
+
+type ModalSize = "small" | "medium" | "large";
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title?: string;
+  children: ReactNode;
+  size?: ModalSize;
+}
+
 export default function Modal({
   isOpen,
   onClose,
   title,
   children,
   size = "medium",
-}) {
+}: ModalProps) {
   if (!isOpen) return null;
 
-  const sizeStyles = {
+  const sizeStyles: Record<ModalSize, CSSProperties> = {
     small: { minWidth: "300px", maxWidth: "400px" },
     medium: { minWidth: "400px", maxWidth: "500px" },
     large: { minWidth: "500px", maxWidth: "700px" },
@@ -43,7 +55,7 @@ export default function Modal({
           position: "relative",
           ...sizeStyles[size],
         }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
         {title && (
           <h2 style={{ margin: "0 0 1rem 0", color: "var(--color-text)" }}>

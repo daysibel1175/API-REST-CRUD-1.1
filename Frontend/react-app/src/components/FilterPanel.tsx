@@ -1,5 +1,20 @@
-import Button from "./Button";
-import Select from "./Select";
+import { ChangeEvent } from "react";
+
+export interface FilterOption {
+  value: string;
+  label: string;
+  values?: string[];
+}
+
+export interface FilterPanelProps {
+  isOpen: boolean;
+  selectedFilter: string | null;
+  onFilterChange: (value: string) => void;
+  filterValue: string;
+  onFilterValueChange: (value: string) => void;
+  filterOptions?: FilterOption[];
+  onClearFilters: () => void;
+}
 
 export default function FilterPanel({
   isOpen,
@@ -9,7 +24,7 @@ export default function FilterPanel({
   onFilterValueChange,
   filterOptions = [],
   onClearFilters,
-}) {
+}: FilterPanelProps) {
   if (!isOpen) return null;
 
   return (
@@ -37,7 +52,9 @@ export default function FilterPanel({
         </label>
         <select
           value={selectedFilter || ""}
-          onChange={(e) => onFilterChange(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            onFilterChange(e.target.value)
+          }
           style={{
             padding: "0.5rem",
             borderRadius: "4px",
@@ -69,7 +86,9 @@ export default function FilterPanel({
           </label>
           <select
             value={filterValue}
-            onChange={(e) => onFilterValueChange(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+              onFilterValueChange(e.target.value)
+            }
             style={{
               padding: "0.5rem",
               borderRadius: "4px",

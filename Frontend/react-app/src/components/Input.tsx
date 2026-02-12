@@ -1,3 +1,15 @@
+import { ChangeEvent, FocusEvent, CSSProperties } from "react";
+
+interface InputProps {
+  type?: string;
+  placeholder?: string;
+  value?: string | number;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  name?: string;
+  style?: CSSProperties;
+  required?: boolean;
+}
+
 export default function Input({
   type = "text",
   placeholder = "",
@@ -5,8 +17,9 @@ export default function Input({
   onChange,
   name = "",
   style = {},
-}) {
-  const baseStyle = {
+  required = false,
+}: InputProps) {
+  const baseStyle: CSSProperties = {
     width: "100%",
     padding: "0.5rem",
     boxSizing: "border-box",
@@ -25,15 +38,16 @@ export default function Input({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      required={required}
       style={{
         ...baseStyle,
         ...style,
       }}
-      onFocus={(e) => {
-        e.target.style.borderColor = "var(--color-primary)";
+      onFocus={(e: FocusEvent<HTMLInputElement>) => {
+        e.currentTarget.style.borderColor = "var(--color-primary)";
       }}
-      onBlur={(e) => {
-        e.target.style.borderColor = "var(--color-border)";
+      onBlur={(e: FocusEvent<HTMLInputElement>) => {
+        e.currentTarget.style.borderColor = "var(--color-border)";
       }}
     />
   );

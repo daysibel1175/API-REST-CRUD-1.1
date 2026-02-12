@@ -6,7 +6,7 @@ import LoginModal from "./LoginModal";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
 
   return (
     <>

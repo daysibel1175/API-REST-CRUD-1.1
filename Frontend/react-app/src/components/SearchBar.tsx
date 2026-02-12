@@ -1,12 +1,19 @@
+import { ChangeEvent, MouseEvent } from "react";
 import Input from "./Input";
-import Button from "./Button";
+
+interface SearchBarProps {
+  searchInput: string;
+  onSearchInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onSearchClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  placeholder?: string;
+}
 
 export default function SearchBar({
   searchInput,
   onSearchInputChange,
   onSearchClick,
   placeholder = "Buscar...",
-}) {
+}: SearchBarProps) {
   return (
     <div
       style={{

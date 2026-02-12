@@ -1,5 +1,18 @@
-import Input from "./Input";
-import Button from "./Button";
+import { ChangeEvent, CSSProperties } from "react";
+
+interface SelectOption {
+  value: string | number;
+  label: string;
+}
+
+interface SelectProps {
+  options?: SelectOption[];
+  value?: string | number;
+  onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
+  placeholder?: string;
+  name?: string;
+  style?: CSSProperties;
+}
 
 export default function Select({
   options = [],
@@ -8,8 +21,8 @@ export default function Select({
   placeholder = "-- Seleccionar --",
   name = "",
   style = {},
-}) {
-  const baseStyle = {
+}: SelectProps) {
+  const baseStyle: CSSProperties = {
     padding: "0.5rem",
     borderRadius: "4px",
     border: "1px solid var(--color-border)",

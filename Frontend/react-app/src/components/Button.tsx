@@ -1,3 +1,17 @@
+import { ReactNode, CSSProperties, MouseEvent } from "react";
+
+type ButtonVariant = "primary" | "secondary" | "danger" | "muted";
+
+interface ButtonProps {
+  children: ReactNode;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  type?: "button" | "submit" | "reset";
+  variant?: ButtonVariant;
+  disabled?: boolean;
+  style?: CSSProperties;
+  fullWidth?: boolean;
+}
+
 export default function Button({
   children,
   onClick,
@@ -6,8 +20,8 @@ export default function Button({
   disabled = false,
   style = {},
   fullWidth = false,
-}) {
-  const baseStyle = {
+}: ButtonProps) {
+  const baseStyle: CSSProperties = {
     padding: "0.65rem 1.25rem",
     borderRadius: "6px",
     border: "none",
@@ -19,7 +33,7 @@ export default function Button({
     width: fullWidth ? "100%" : "auto",
   };
 
-  const variantStyles = {
+  const variantStyles: Record<ButtonVariant, CSSProperties> = {
     primary: {
       ...baseStyle,
       backgroundColor: "var(--color-primary)",
@@ -46,7 +60,7 @@ export default function Button({
     },
   };
 
-  const finalStyle = { ...variantStyles[variant], ...style };
+  const finalStyle: CSSProperties = { ...variantStyles[variant], ...style };
 
   return (
     <button
@@ -54,15 +68,17 @@ export default function Button({
       onClick={onClick}
       disabled={disabled}
       style={finalStyle}
-      onMouseEnter={(e) => {
+      onMouseEnter={(e: MouseEvent<HTMLButtonElement>) => {
         if (!disabled) {
-          e.target.style.opacity = "0.9";
-          e.target.style.transform = "scale(1.02)";
+          e.currentTarget.style.opacity = "0.9";
+          e.currentTarget.style.transform = "scale(1.02)";
         }
       }}
-      onMouseLeave={(e) => {
-        e.target.style.opacity = variantStyles[variant].opacity || "1";
-        e.target.style.transform = "scale(1)";
+      onMouseLeave={(e: MouseEvent<HTMLButtonElement>) => {
+        e.currentTarget.style.opacity = String(
+          variantStyles[variant].opacity || 1,
+        );
+        e.currentTarget.style.transform = "scale(1)";
       }}
     >
       {children}
