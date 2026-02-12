@@ -4,9 +4,9 @@
 
 ## Bem-vindo ao repository oficial de API TRILHASBRASIL!
 
-TRILHASBRASIL é uma API REST implementada com operações CRUD .
+TRILHASBRASIL é uma API REST implementada com operações CRUD completas para gerenciar trilhas, guias, usuários e grupos.
 
-TRILHASBRASIL foi criada com a finalidade de conectar a beleza da natureza com as pessoas, para todo que quiser conhecer as belezas naturais que o Brasil oferece, en familia ou individualmente.
+TRILHASBRASIL foi criada com a finalidade de conectar a beleza da natureza com as pessoas, para todos que queiram conhecer as belezas naturais que o Brasil oferece, em família ou individualmente.
 
 <hr>
 
@@ -20,51 +20,185 @@ Com essa configuração, a API está pronta para oferecer uma interface de progr
 
 <hr>
 
-**Instalação e Execução (Monorepo)**
+## 📋 Pré-requisitos
 
-1. Configurar variáveis de ambiente:
+Antes de começar, certifique-se de ter instalado:
 
-Crie um arquivo `.env` na pasta raiz com:
+- Node.js (versão 14 ou superior)
+- npm ou yarn
+- Conta no MongoDB Atlas (para conexão com o banco de dados)
+
+## 🚀 Instalação e Execução
+
+### 1. Clone o repositório
 
 ```bash
-cp .env.example .env
-# Edite e defina KEY_URI com a sua Connection String do MongoDB Atlas
+git clone https://github.com/daysibel1175/API-REST-CRUD-1.1.git
+cd API-REST-CRUD-1.1
 ```
 
-2. Instalar dependências do monorepo:
+### 2. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` na pasta `Backend` com:
+
+```env
+KEY_URI=sua_connection_string_do_mongodb_atlas
+PORT=9000
+```
+
+> **Nota**: Obtenha sua Connection String no [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+
+### 3. Instale as dependências
 
 ```bash
 npm install
 ```
 
-3. Rodar Backend e Frontend juntos:
+Este comando instalará todas as dependências do monorepo (Backend e Frontend).
+
+### 4. Execute a aplicação
+
+#### Opção 1: Rodar Backend e Frontend juntos
 
 ```bash
 npm run dev
 ```
 
-- Backend: http://localhost:9000
-- Frontend: http://localhost:3000 (abrirá automaticamente em `loyaut/index.html`)
+ou
 
-4. Popular o banco (opcional):
+```bash
+npm run:all
+```
+
+#### Opção 2: Rodar separadamente
+
+**Backend:**
+
+```bash
+npm run backend
+```
+
+**Frontend:**
+
+```bash
+npm run frontend
+```
+
+### 5. Acesse a aplicação
+
+- **Backend API**: http://localhost:9000
+- **Frontend**: http://localhost:5173
+
+### 6. Popular o banco de dados (opcional)
+
+Para adicionar dados de exemplo ao banco:
 
 ```bash
 npm run seed
 ```
 
+## 📦 Scripts Disponíveis
+
+| Comando            | Descrição                                    |
+| ------------------ | -------------------------------------------- |
+| `npm run dev`      | Inicia Backend e Frontend simultaneamente    |
+| `npm run:all`      | Alias para `npm run dev`                     |
+| `npm run backend`  | Inicia apenas o Backend                      |
+| `npm run frontend` | Inicia apenas o Frontend                     |
+| `npm run seed`     | Popula o banco de dados com dados de exemplo |
+
+## 📁 Estrutura do Projeto
+
+```
+API-REST-CRUD-1.1/
+├── Backend/
+│   ├── src/
+│   │   ├── models/      # Modelos do MongoDB
+│   │   ├── routes/      # Rotas da API
+│   │   ├── index.js     # Servidor principal
+│   │   └── seed.js      # Script de população do banco
+│   └── package.json
+├── Frontend/
+│   └── react-app/
+│       ├── src/
+│       │   ├── components/  # Componentes reutilizáveis
+│       │   ├── pages/       # Páginas da aplicação
+│       │   ├── context/     # Contextos (AuthContext)
+│       │   ├── services/    # Serviços de API
+│       │   └── App.jsx
+│       └── package.json
+└── package.json         # Configuração do monorepo
+```
+
 <hr>
-## ✔️ Técnicas e Tecnologias utilizadas na API
 
-- `Arquitectura REST`
-- `Nodejs`
-- `Mongoose`
+## ✔️ Técnicas e Tecnologias utilizadas
 
-**Documentação**
+### Backend
 
-- La documentação esta disponível [Aqui](https://documenter.getpostman.com/view/22955115/2s83zjt3pH "Aqui")
+- **Node.js** - Plataforma de execução JavaScript
+- **Express** - Framework web minimalista
+- **MongoDB Atlas** - Banco de dados NoSQL em nuvem
+- **Mongoose** - ODM para MongoDB
+- **Nodemon** - Ferramenta de desenvolvimento
+
+### Frontend
+
+- **React** - Biblioteca JavaScript para interfaces
+- **Vite** - Ferramenta de build rápida
+- **React Router** - Navegação entre páginas
+- **Axios** - Cliente HTTP
+
+### Arquitetura
+
+- **REST API** - Padrão arquitetural
+- **Monorepo** - Estrutura de projeto unificada
+- **CRUD Operations** - Create, Read, Update, Delete
+
+## 🔗 Endpoints da API
+
+### Trilhas
+
+- `GET /trilhas` - Listar todas as trilhas
+- `GET /trilhas/:id` - Obter trilha específica
+- `POST /trilhas` - Criar nova trilha
+- `PUT /trilhas/:id` - Atualizar trilha
+- `DELETE /trilhas/:id` - Deletar trilha
+
+### Guias
+
+- `GET /guias` - Listar todos os guias
+- `GET /guias/:id` - Obter guia específico
+- `POST /guias` - Criar novo guia
+- `PUT /guias/:id` - Atualizar guia
+- `DELETE /guias/:id` - Deletar guia
+
+### Usuários
+
+- `GET /usuarios` - Listar todos os usuários
+- `GET /usuarios/:id` - Obter usuário específico
+- `POST /usuarios` - Criar novo usuário
+- `PUT /usuarios/:id` - Atualizar usuário
+- `DELETE /usuarios/:id` - Deletar usuário
+- `POST /usuarios/login` - Autenticar usuário
+
+### Grupos
+
+- `GET /grupos` - Listar todos os grupos
+- `GET /grupos/:id` - Obter grupo específico
+- `POST /grupos` - Criar novo grupo
+- `PUT /grupos/:id` - Atualizar grupo
+- `DELETE /grupos/:id` - Deletar grupo
+
+## 📚 Documentação
+
+A documentação completa da API está disponível em:
+
+- **Postman**: [Documentação da API](https://documenter.getpostman.com/view/22955115/2s83zjt3pH)
+
 <hr>
 
-**Sobre nós**
+## 👥 Sobre nós
 
 O desenvolvimento de TRILHASBRASIL é liderado pelo grupo de desenvolvedores de Back-end.
 
