@@ -1,27 +1,27 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
+import mongoose from "mongoose";
+import path from "path";
+import dotenv from "dotenv";
 
-const Usuario = require("./models/usuario");
-const Guia = require("./models/guias");
-const Grupo = require("./models/grupo");
-const Trilha = require("./models/trilhas");
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
-// Conectar ao MongoDB
+import Usuario from "./models/usuario";
+import Guia from "./models/guias";
+import Grupo from "./models/grupo";
+import Trilha from "./models/trilhas";
+
 mongoose
-  .connect(process.env.KEY_URI)
+  .connect(process.env.KEY_URI as string)
   .then(() => console.log("Conectado ao MongoDB Atlas!"))
-  .catch((error) => console.error("Erro ao conectar:", error));
+  .catch((error: Error) => console.error("Erro ao conectar:", error));
 
-async function popularBancoDeDados() {
+async function popularBancoDeDados(): Promise<void> {
   try {
-    // Limpar dados existentes
     await Usuario.deleteMany({});
     await Guia.deleteMany({});
     await Grupo.deleteMany({});
     await Trilha.deleteMany({});
     console.log("✅ Dados antigos removidos");
 
-    // Criar usuários
     const usuarios = await Usuario.insertMany([
       {
         nome: "Maria Silva",
@@ -56,24 +56,13 @@ async function popularBancoDeDados() {
     ]);
     console.log("✅ Usuários criados:", usuarios.length);
 
-    // Criar guias
     const guias = await Guia.insertMany([
-      {
-        nome: "Carlos Montanha",
-        contato: 11999888777,
-      },
-      {
-        nome: "Fernanda Trilhas",
-        contato: 11888777666,
-      },
-      {
-        nome: "Ricardo Aventura",
-        contato: 11777666555,
-      },
+      { nome: "Carlos Montanha", contato: 11999888777 },
+      { nome: "Fernanda Trilhas", contato: 11888777666 },
+      { nome: "Ricardo Aventura", contato: 11777666555 },
     ]);
     console.log("✅ Guias criados:", guias.length);
 
-    // Criar grupos
     const grupos = await Grupo.insertMany([
       {
         guia: guias[0]._id,
@@ -85,22 +74,16 @@ async function popularBancoDeDados() {
         familiar: false,
         usuario: [usuarios[2]._id, usuarios[4]._id],
       },
-      {
-        guia: guias[2]._id,
-        familiar: true,
-        usuario: [usuarios[3]._id],
-      },
+      { guia: guias[2]._id, familiar: true, usuario: [usuarios[3]._id] },
     ]);
     console.log("✅ Grupos criados:", grupos.length);
 
-    // Atualizar usuários com seus grupos
     await Usuario.updateOne({ _id: usuarios[0]._id }, { grupo: grupos[0]._id });
     await Usuario.updateOne({ _id: usuarios[1]._id }, { grupo: grupos[0]._id });
     await Usuario.updateOne({ _id: usuarios[2]._id }, { grupo: grupos[1]._id });
     await Usuario.updateOne({ _id: usuarios[3]._id }, { grupo: grupos[2]._id });
     await Usuario.updateOne({ _id: usuarios[4]._id }, { grupo: grupos[1]._id });
 
-    // Criar trilhas
     const trilhas = await Trilha.insertMany([
       {
         nome: "Trilha da Cachoeira",
@@ -150,27 +133,17 @@ async function popularBancoDeDados() {
     ]);
     console.log("✅ Trilhas criadas:", trilhas.length);
 
-    // Atualizar guias com suas trilhas e grupos
     await Guia.updateOne(
       { _id: guias[0]._id },
-      {
-        trilha: trilhas[0]._id,
-        grupo: grupos[0]._id,
-      }
+      { trilha: trilhas[0]._id, grupo: grupos[0]._id },
     );
     await Guia.updateOne(
       { _id: guias[1]._id },
-      {
-        trilha: trilhas[1]._id,
-        grupo: grupos[1]._id,
-      }
+      { trilha: trilhas[1]._id, grupo: grupos[1]._id },
     );
     await Guia.updateOne(
       { _id: guias[2]._id },
-      {
-        trilha: trilhas[2]._id,
-        grupo: grupos[2]._id,
-      }
+      { trilha: trilhas[2]._id, grupo: grupos[2]._id },
     );
 
     console.log("\n🎉 Banco de dados populado com sucesso!");
@@ -188,5 +161,4 @@ async function popularBancoDeDados() {
   }
 }
 
-// Executar
 popularBancoDeDados();
