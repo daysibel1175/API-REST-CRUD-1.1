@@ -7,6 +7,8 @@ const TrilhaSchema = new mongoose.Schema(
     descricao: { type: String },
     localizacao: { type: String },
     dica: { type: String },
+    duracao: { type: String },
+    img: { type: String },
     guia: [{ type: mongoose.Schema.Types.ObjectId, ref: "Guia" }],
     grupo: [{ type: mongoose.Schema.Types.ObjectId, ref: "Grupo" }],
   },
