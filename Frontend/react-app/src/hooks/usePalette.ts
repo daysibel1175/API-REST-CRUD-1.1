@@ -1,18 +1,20 @@
 import { useEffect } from "react";
 import { Vibrant } from "node-vibrant/browser";
 
-export function usePalette(imagePath = "/legacy-images/icono%20da%20API.png") {
+export function usePalette(
+  imagePath: string = "/legacy-images/icono%20da%20API.png",
+): void {
   useEffect(() => {
-    const url = imagePath;
+    const url: string = imagePath;
     Vibrant.from(url)
       .getPalette()
       .then((palette) => {
-        const vibr = palette.Vibrant?.hex || "#2563eb";
-        const muted = palette.Muted?.hex || "#6b7280";
-        const dark = palette.DarkMuted?.hex || "#111827";
-        const light = palette.LightMuted?.hex || "#ffffff";
+        const vibr: string = palette.Vibrant?.hex || "#2563eb";
+        const muted: string = palette.Muted?.hex || "#6b7280";
+        const dark: string = palette.DarkMuted?.hex || "#111827";
+        const light: string = palette.LightMuted?.hex || "#ffffff";
 
-        const root = document.documentElement.style;
+        const root: CSSStyleDeclaration = document.documentElement.style;
         root.setProperty("--color-primary", vibr);
         root.setProperty("--color-muted", muted);
         root.setProperty("--color-text", dark);
