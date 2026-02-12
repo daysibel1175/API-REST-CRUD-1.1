@@ -3,12 +3,12 @@ import "./App.css";
 import "./styles/theme.css";
 import { usePalette } from "./hooks/usePalette";
 import { AuthProvider } from "./context/AuthContext";
-import Navbar from "./components/Navbar.jsx";
-import HomePage from "./pages/HomePage.jsx";
-import TrilhasPage from "./pages/TrilhasPage.jsx";
-import GuiasPage from "./pages/GuiasPage.jsx";
-import GruposPage from "./pages/GruposPage.jsx";
-import UsuariosPage from "./pages/UsuariosPage.jsx";
+import Navbar from "./components/Navbar";
+import HomePage from "./pages/HomePage";
+import TrilhasPage from "./pages/TrilhasPage";
+import GuiasPage from "./pages/GuiasPage";
+import GruposPage from "./pages/GruposPage";
+import UsuariosPage from "./pages/UsuariosPage";
 
 function App() {
   usePalette("/legacy-images/icono%20da%20API.png");
