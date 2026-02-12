@@ -11,20 +11,33 @@ import Modal from "../components/Modal";
 import ConfirmDialog from "../components/ConfirmDialog";
 import SearchBar from "../components/SearchBar";
 import FilterPanel from "../components/FilterPanel";
+import { Trilha } from "../types";
+
+interface TrilhaForm {
+  nome: string;
+  tipo_de_trilha: string;
+  localizacao: string;
+  descricao: string;
+  dica: string;
+  duracao: string;
+  km_camino: string;
+  img: string;
+}
 
 export default function TrilhasPage() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [actionError, setActionError] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
-  const [form, setForm] = useState({
+  const [data, setData] = useState<Trilha[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] =
+    useState<boolean>(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [form, setForm] = useState<TrilhaForm>({
     nome: "",
     tipo_de_trilha: "",
     localizacao: "",
@@ -34,13 +47,13 @@ export default function TrilhasPage() {
     km_camino: "",
     img: "",
   });
-  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState(null);
-  const [filterValue, setFilterValue] = useState("");
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState<boolean>(false);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+  const [filterValue, setFilterValue] = useState<string>("");
 
   useEffect(() => {
     let mounted = true;
-    fetcher("/trilhas")
+    fetcher<Trilha[]>("/trilhas")
       .then((res) => {
         if (mounted) {
           setData(res);
@@ -56,8 +69,8 @@ export default function TrilhasPage() {
   if (loading) return <p>Carregando trilhas...</p>;
   if (error) return <p>Erro: {error}</p>;
 
-  const getUniqueFilterValues = (field) => {
-    const values = data.map((t) => t[field]).filter(Boolean);
+  const getUniqueFilterValues = (field: keyof Trilha): string[] => {
+    const values = data.map((t) => t[field]).filter(Boolean) as string[];
     return [...new Set(values)].sort();
   };
 
@@ -65,7 +78,7 @@ export default function TrilhasPage() {
     // Aplicar búsqueda en tiempo real
     let matchesSearch = true;
     if (searchTerm) {
-      const normalize = (text) => {
+      const normalize = (text: string) => {
         return text
           .toLowerCase()
           .normalize("NFD")
@@ -73,7 +86,7 @@ export default function TrilhasPage() {
       };
 
       const term = normalize(searchTerm);
-      const searchInWords = (text) => {
+      const searchInWords = (text: string | undefined) => {
         if (!text) return false;
         return normalize(text)
           .split(/\s+/)
@@ -96,19 +109,19 @@ export default function TrilhasPage() {
       } else if (selectedFilter === "duracao") {
         matchesFilter = t.duracao === filterValue;
       } else if (selectedFilter === "km_camino") {
-        matchesFilter = t.km_camino === filterValue;
+        matchesFilter = (t as any).km_camino === filterValue;
       }
     }
 
     return matchesSearch && matchesFilter;
   });
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setForm({ ...form, img: reader.result });
+        setForm({ ...form, img: reader.result as string });
       };
       reader.readAsDataURL(file);
     }
@@ -116,7 +129,7 @@ export default function TrilhasPage() {
 
   const handleRemoveImage = () => {
     setForm({ ...form, img: "" });
-    const fileInput = document.getElementById("fileInput");
+    const fileInput = document.getElementById("fileInput") as HTMLInputElement;
     if (fileInput) fileInput.value = "";
   };
 
@@ -136,22 +149,22 @@ export default function TrilhasPage() {
     setIsModalOpen(false);
   };
 
-  const handleEdit = (trilha) => {
+  const handleEdit = (trilha: Trilha) => {
     setEditingId(trilha._id);
     setForm({
       nome: trilha.nome,
       tipo_de_trilha: trilha.tipo_de_trilha,
-      localizacao: trilha.localizacao,
-      descricao: trilha.descricao,
-      dica: trilha.dica,
-      duracao: trilha.duracao,
-      km_camino: trilha.km_camino || "",
+      localizacao: trilha.localizacao || "",
+      descricao: trilha.descricao || "",
+      dica: trilha.dica || "",
+      duracao: trilha.duracao || "",
+      km_camino: (trilha as any).km_camino || "",
       img: trilha.img || "",
     });
     setIsModalOpen(true);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setActionError(null);
     setSaving(true);
@@ -162,8 +175,8 @@ export default function TrilhasPage() {
         await updateTrilha(editingId, form);
         setData((prev) =>
           prev.map((t) =>
-            t._id === editingId ? { ...t, ...form, _id: editingId } : t
-          )
+            t._id === editingId ? { ...t, ...form, _id: editingId } : t,
+          ),
         );
       } else {
         // Criar nova trilha
@@ -182,31 +195,32 @@ export default function TrilhasPage() {
       });
       setEditingId(null);
       setIsModalOpen(false);
-    } catch (err) {
+    } catch (err: any) {
       setActionError(
-        err.response?.data?.message || err.message || "Erro ao salvar"
+        err.response?.data?.message || err.message || "Erro ao salvar",
       );
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     // Abrir modal de confirmação
     setDeleteConfirmId(id);
     setIsDeleteConfirmOpen(true);
   };
 
   const handleConfirmDelete = async () => {
+    if (!deleteConfirmId) return;
     setActionError(null);
     try {
       await deleteTrilha(deleteConfirmId);
       setData((prev) => prev.filter((t) => t._id !== deleteConfirmId));
       setIsDeleteConfirmOpen(false);
       setDeleteConfirmId(null);
-    } catch (err) {
+    } catch (err: any) {
       setActionError(
-        err.response?.data?.message || err.message || "Erro ao deletar"
+        err.response?.data?.message || err.message || "Erro ao deletar",
       );
     }
   };
@@ -298,7 +312,7 @@ export default function TrilhasPage() {
           {
             value: "km_camino",
             label: "KM de Camino",
-            values: getUniqueFilterValues("km_camino"),
+            values: getUniqueFilterValues("km_camino" as keyof Trilha),
           },
         ]}
         onClearFilters={() => {
@@ -413,10 +427,10 @@ export default function TrilhasPage() {
                   transition: "all 0.2s ease",
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = "var(--color-border)";
+                  e.currentTarget.style.backgroundColor = "var(--color-border)";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = "var(--color-bg)";
+                  e.currentTarget.style.backgroundColor = "var(--color-bg)";
                 }}
               >
                 {form.img ? "Cambiar imagen" : "Seleccionar imagen"}
@@ -461,8 +475,8 @@ export default function TrilhasPage() {
                     ? "Actualizando..."
                     : "Agregando..."
                   : editingId
-                  ? "Actualizar trilha"
-                  : "Agregar trilha"}
+                    ? "Actualizar trilha"
+                    : "Agregar trilha"}
               </Button>
               <Button
                 type="button"
@@ -536,18 +550,18 @@ export default function TrilhasPage() {
                     <strong>Localización:</strong> {t.localizacao}
                   </p>
                 )}
-                {t.duracion && (
+                {t.duracao && (
                   <p
                     style={{ margin: "0.25rem 0", color: "var(--color-muted)" }}
                   >
-                    <strong>Duración:</strong> {t.duracion}
+                    <strong>Duración:</strong> {t.duracao}
                   </p>
                 )}
-                {t.km_camino && (
+                {(t as any).km_camino && (
                   <p
                     style={{ margin: "0.25rem 0", color: "var(--color-muted)" }}
                   >
-                    <strong>KM de camino:</strong> {t.km_camino}
+                    <strong>KM de camino:</strong> {(t as any).km_camino}
                   </p>
                 )}
                 {t.descricao && (

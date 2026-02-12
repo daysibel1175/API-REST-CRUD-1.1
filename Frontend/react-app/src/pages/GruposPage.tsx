@@ -6,33 +6,39 @@ import {
   updateGrupo,
 } from "../services/api";
 import Button from "../components/Button";
-import Input from "../components/Input";
 import Modal from "../components/Modal";
 import ConfirmDialog from "../components/ConfirmDialog";
 import SearchBar from "../components/SearchBar";
+import { Grupo, Guia } from "../types";
+
+interface GrupoForm {
+  guia: string;
+  familiar: boolean;
+}
 
 export default function GruposPage() {
-  const [data, setData] = useState([]);
-  const [guias, setGuias] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [actionError, setActionError] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
-  const [isGuiaDropdownOpen, setIsGuiaDropdownOpen] = useState(false);
-  const [form, setForm] = useState({
+  const [data, setData] = useState<Grupo[]>([]);
+  const [guias, setGuias] = useState<Guia[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] =
+    useState<boolean>(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [isGuiaDropdownOpen, setIsGuiaDropdownOpen] = useState<boolean>(false);
+  const [form, setForm] = useState<GrupoForm>({
     guia: "",
     familiar: false,
   });
 
   useEffect(() => {
     let mounted = true;
-    Promise.all([fetcher("/grupos"), fetcher("/guias")])
+    Promise.all([fetcher<Grupo[]>("/grupos"), fetcher<Guia[]>("/guias")])
       .then(([gruposRes, guiasRes]) => {
         if (mounted) {
           setData(gruposRes);
@@ -47,8 +53,9 @@ export default function GruposPage() {
   }, []);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (!e.target.closest('[data-dropdown="guia"]')) {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-dropdown="guia"]')) {
         setIsGuiaDropdownOpen(false);
       }
     };
@@ -67,7 +74,7 @@ export default function GruposPage() {
     if (!searchTerm) return true;
 
     // Función para normalizar texto (remover acentos)
-    const normalize = (text) => {
+    const normalize = (text: string) => {
       return text
         .toLowerCase()
         .normalize("NFD")
@@ -75,10 +82,11 @@ export default function GruposPage() {
     };
 
     const term = normalize(searchTerm);
-    const guiaName = normalize(g.guia?.nome || "");
+    const guiaObj = typeof g.guia === "string" ? null : g.guia;
+    const guiaName = normalize(guiaObj?.nome || "");
 
     // Busca por palabra completa que comienza con el término
-    const searchInWords = (text) => {
+    const searchInWords = (text: string) => {
       if (!text) return false;
       return text.split(/\s+/).some((word) => word.startsWith(term));
     };
@@ -86,7 +94,7 @@ export default function GruposPage() {
     return searchInWords(guiaName);
   });
 
-  const handleAdd = async (e) => {
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     setActionError(null);
     setSaving(true);
@@ -101,8 +109,8 @@ export default function GruposPage() {
         await updateGrupo(editingId, payload);
         setData((prev) =>
           prev.map((g) =>
-            g._id === editingId ? { ...g, ...payload, _id: editingId } : g
-          )
+            g._id === editingId ? { ...g, ...payload, _id: editingId } : g,
+          ),
         );
       } else {
         // Criar novo grupo
@@ -112,9 +120,9 @@ export default function GruposPage() {
       setForm({ guia: "", familiar: false });
       setEditingId(null);
       setIsModalOpen(false);
-    } catch (err) {
+    } catch (err: any) {
       setActionError(
-        err.response?.data?.message || err.message || "Erro ao adicionar"
+        err.response?.data?.message || err.message || "Erro ao adicionar",
       );
     } finally {
       setSaving(false);
@@ -128,31 +136,33 @@ export default function GruposPage() {
     setIsModalOpen(false);
   };
 
-  const handleEdit = (grupo) => {
+  const handleEdit = (grupo: Grupo) => {
     setEditingId(grupo._id);
+    const guiaId = typeof grupo.guia === "string" ? grupo.guia : grupo.guia._id;
     setForm({
-      guia: grupo.guia._id || grupo.guia,
+      guia: guiaId,
       familiar: grupo.familiar,
     });
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     // Abrir modal de confirmação
     setDeleteConfirmId(id);
     setIsDeleteConfirmOpen(true);
   };
 
   const handleConfirmDelete = async () => {
+    if (!deleteConfirmId) return;
     setActionError(null);
     try {
       await deleteGrupo(deleteConfirmId);
       setData((prev) => prev.filter((g) => g._id !== deleteConfirmId));
       setIsDeleteConfirmOpen(false);
       setDeleteConfirmId(null);
-    } catch (err) {
+    } catch (err: any) {
       setActionError(
-        err.response?.data?.message || err.message || "Erro ao deletar"
+        err.response?.data?.message || err.message || "Erro ao deletar",
       );
     }
   };
@@ -160,6 +170,11 @@ export default function GruposPage() {
   const handleCancelDelete = () => {
     setIsDeleteConfirmOpen(false);
     setDeleteConfirmId(null);
+  };
+
+  const getGuiaName = (guia: string | Guia): string => {
+    if (typeof guia === "string") return guia;
+    return guia.nome;
   };
 
   return (
@@ -278,12 +293,13 @@ export default function GruposPage() {
                     }}
                     onMouseEnter={(e) => {
                       if (form.guia !== g._id) {
-                        e.target.style.backgroundColor = "var(--color-border)";
+                        e.currentTarget.style.backgroundColor =
+                          "var(--color-border)";
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (form.guia !== g._id) {
-                        e.target.style.backgroundColor = "transparent";
+                        e.currentTarget.style.backgroundColor = "transparent";
                       }
                     }}
                   >
@@ -320,8 +336,8 @@ export default function GruposPage() {
                   ? "Atualizando..."
                   : "Adicionando..."
                 : editingId
-                ? "Atualizar grupo"
-                : "Adicionar grupo"}
+                  ? "Atualizar grupo"
+                  : "Adicionar grupo"}
             </Button>
             <Button
               type="button"
@@ -351,7 +367,7 @@ export default function GruposPage() {
               }}
             >
               <strong>Familiar:</strong> {g.familiar ? "Sim" : "Não"}
-              {g.guia ? ` — Guia: ${g.guia.nome || g.guia}` : ""}
+              {g.guia ? ` — Guia: ${getGuiaName(g.guia)}` : ""}
               <div
                 style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}
               >

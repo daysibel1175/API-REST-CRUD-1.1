@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteUsuario } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
-export default function UsuariosPage() {
+export default function UsuariosPage(): JSX.Element {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -18,11 +18,14 @@ export default function UsuariosPage() {
     return <p>Redireccionando...</p>;
   }
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = async (
+    e: MouseEvent<HTMLButtonElement>,
+  ): Promise<void> => {
+    e.preventDefault();
     setError(null);
     if (
       !window.confirm(
-        "¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer."
+        "¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.",
       )
     ) {
       return;
@@ -33,9 +36,9 @@ export default function UsuariosPage() {
       logout();
       navigate("/");
     } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || "Error al deletar cuenta"
-      );
+      const errorMessage =
+        err instanceof Error ? err.message : "Error al deletar cuenta";
+      setError(errorMessage);
     }
   };
 

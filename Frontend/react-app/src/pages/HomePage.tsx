@@ -1,5 +1,6 @@
 import img from "../../dist/legacy-images/imgTrilha.jpg";
-export default function HomePage() {
+
+export default function HomePage(): JSX.Element {
   return (
     <section>
       <header

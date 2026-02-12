@@ -5,27 +5,34 @@ import Input from "../components/Input";
 import Modal from "../components/Modal";
 import ConfirmDialog from "../components/ConfirmDialog";
 import SearchBar from "../components/SearchBar";
+import { Guia } from "../types";
+
+interface GuiaForm {
+  nome: string;
+  contato: string | number;
+}
 
 export default function GuiasPage() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [actionError, setActionError] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
-  const [form, setForm] = useState({
+  const [data, setData] = useState<Guia[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] =
+    useState<boolean>(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [form, setForm] = useState<GuiaForm>({
     nome: "",
     contato: "",
   });
 
   useEffect(() => {
     let mounted = true;
-    fetcher("/guias")
+    fetcher<Guia[]>("/guias")
       .then((res) => {
         if (mounted) {
           setData(res);
@@ -45,7 +52,7 @@ export default function GuiasPage() {
     if (!searchTerm) return true;
 
     // Función para normalizar texto (remover acentos)
-    const normalize = (text) => {
+    const normalize = (text: string) => {
       return text
         .toLowerCase()
         .normalize("NFD")
@@ -55,7 +62,7 @@ export default function GuiasPage() {
     const term = normalize(searchTerm);
 
     // Busca por palabra completa que comienza con el término
-    const searchInWords = (text) => {
+    const searchInWords = (text: string | undefined) => {
       if (!text) return false;
       return normalize(text.toString())
         .split(/\s+/)
@@ -65,7 +72,7 @@ export default function GuiasPage() {
     return searchInWords(g.nome);
   });
 
-  const handleAdd = async (e) => {
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     setActionError(null);
     setSaving(true);
@@ -80,8 +87,8 @@ export default function GuiasPage() {
         await updateGuia(editingId, payload);
         setData((prev) =>
           prev.map((g) =>
-            g._id === editingId ? { ...g, ...payload, _id: editingId } : g
-          )
+            g._id === editingId ? { ...g, ...payload, _id: editingId } : g,
+          ),
         );
       } else {
         // Criar novo guia
@@ -91,9 +98,9 @@ export default function GuiasPage() {
       setForm({ nome: "", contato: "" });
       setEditingId(null);
       setIsModalOpen(false);
-    } catch (err) {
+    } catch (err: any) {
       setActionError(
-        err.response?.data?.message || err.message || "Erro ao adicionar"
+        err.response?.data?.message || err.message || "Erro ao adicionar",
       );
     } finally {
       setSaving(false);
@@ -107,7 +114,7 @@ export default function GuiasPage() {
     setIsModalOpen(false);
   };
 
-  const handleEdit = (guia) => {
+  const handleEdit = (guia: Guia) => {
     setEditingId(guia._id);
     setForm({
       nome: guia.nome,
@@ -116,22 +123,23 @@ export default function GuiasPage() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     // Abrir modal de confirmação
     setDeleteConfirmId(id);
     setIsDeleteConfirmOpen(true);
   };
 
   const handleConfirmDelete = async () => {
+    if (!deleteConfirmId) return;
     setActionError(null);
     try {
       await deleteGuia(deleteConfirmId);
       setData((prev) => prev.filter((g) => g._id !== deleteConfirmId));
       setIsDeleteConfirmOpen(false);
       setDeleteConfirmId(null);
-    } catch (err) {
+    } catch (err: any) {
       setActionError(
-        err.response?.data?.message || err.message || "Erro ao deletar"
+        err.response?.data?.message || err.message || "Erro ao deletar",
       );
     }
   };
@@ -139,6 +147,12 @@ export default function GuiasPage() {
   const handleCancelDelete = () => {
     setIsDeleteConfirmOpen(false);
     setDeleteConfirmId(null);
+  };
+
+  const getTrilhaName = (trilha: any): string => {
+    if (!trilha) return "";
+    if (typeof trilha === "string") return trilha;
+    return trilha.nome || "";
   };
 
   return (
@@ -219,8 +233,8 @@ export default function GuiasPage() {
                   ? "Atualizando..."
                   : "Adicionando..."
                 : editingId
-                ? "Atualizar guia"
-                : "Adicionar guia"}
+                  ? "Atualizar guia"
+                  : "Adicionar guia"}
             </Button>
             <Button
               type="button"
@@ -250,7 +264,7 @@ export default function GuiasPage() {
               }}
             >
               <strong>{g.nome}</strong> — contato: {g.contato}
-              {g.trilha ? ` — trilha: ${g.trilha.nome || g.trilha}` : ""}
+              {g.trilha ? ` — trilha: ${getTrilhaName(g.trilha)}` : ""}
               <div
                 style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}
               >
