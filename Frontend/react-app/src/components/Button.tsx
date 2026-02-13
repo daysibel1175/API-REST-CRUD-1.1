@@ -1,14 +1,17 @@
 import { ReactNode, CSSProperties, MouseEvent } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "danger" | "muted";
+type ButtonVariant = "primary" | "secondary" | "danger" | "muted" | "outline";
+type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {
   children: ReactNode;
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: MouseEvent) => void;
   type?: "button" | "submit" | "reset";
   variant?: ButtonVariant;
+  size?: ButtonSize;
   disabled?: boolean;
   style?: CSSProperties;
+  className?: string;
   fullWidth?: boolean;
 }
 
@@ -17,69 +20,52 @@ export default function Button({
   onClick,
   type = "button",
   variant = "primary",
+  size = "md",
   disabled = false,
   style = {},
+  className = "",
   fullWidth = false,
 }: ButtonProps) {
-  const baseStyle: CSSProperties = {
-    padding: "0.65rem 1.25rem",
-    borderRadius: "6px",
-    border: "none",
-    fontSize: "0.95rem",
-    cursor: disabled ? "not-allowed" : "pointer",
-    fontWeight: "600",
-    transition: "all 0.2s ease",
-    whiteSpace: "nowrap",
-    width: fullWidth ? "100%" : "auto",
+  const baseClasses =
+    "inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-200 whitespace-nowrap";
+
+  const sizeClasses: Record<ButtonSize, string> = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-5 py-2 text-base",
+    lg: "px-6 py-3 text-lg",
   };
 
-  const variantStyles: Record<ButtonVariant, CSSProperties> = {
-    primary: {
-      ...baseStyle,
-      backgroundColor: "var(--color-primary)",
-      color: "white",
-      opacity: disabled ? 0.6 : 1,
-    },
-    secondary: {
-      ...baseStyle,
-      backgroundColor: "var(--color-border)",
-      color: "var(--color-text)",
-      opacity: disabled ? 0.6 : 1,
-    },
-    danger: {
-      ...baseStyle,
-      backgroundColor: "#dc3545",
-      color: "white",
-      opacity: disabled ? 0.6 : 1,
-    },
-    muted: {
-      ...baseStyle,
-      backgroundColor: "var(--color-muted)",
-      color: "white",
-      opacity: disabled ? 0.6 : 1,
-    },
+  const variantClasses: Record<ButtonVariant, string> = {
+    primary: "bg-primary text-white hover:opacity-90",
+    secondary: "bg-border text-text hover:opacity-90",
+    danger: "bg-red-600 text-white hover:bg-red-700",
+    muted: "bg-muted text-white hover:opacity-90",
+    outline: "border border-border text-text hover:border-primary",
   };
 
-  const finalStyle: CSSProperties = { ...variantStyles[variant], ...style };
+  const widthClass = fullWidth ? "w-full" : "w-auto";
+  const disabledClass = disabled
+    ? "opacity-60 cursor-not-allowed pointer-events-none"
+    : "cursor-pointer";
+
+  const finalClassName = [
+    baseClasses,
+    sizeClasses[size],
+    variantClasses[variant],
+    widthClass,
+    disabledClass,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      style={finalStyle}
-      onMouseEnter={(e: MouseEvent<HTMLButtonElement>) => {
-        if (!disabled) {
-          e.currentTarget.style.opacity = "0.9";
-          e.currentTarget.style.transform = "scale(1.02)";
-        }
-      }}
-      onMouseLeave={(e: MouseEvent<HTMLButtonElement>) => {
-        e.currentTarget.style.opacity = String(
-          variantStyles[variant].opacity || 1,
-        );
-        e.currentTarget.style.transform = "scale(1)";
-      }}
+      className={finalClassName}
+      style={style}
     >
       {children}
     </button>

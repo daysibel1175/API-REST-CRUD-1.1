@@ -1,5 +1,4 @@
-import img from "../../dist/legacy-images/imgTrilha.jpg";
-
+import img from "../../dist/legacy-images/baixados.webp"
 export default function HomePage(): JSX.Element {
   return (
     <section>

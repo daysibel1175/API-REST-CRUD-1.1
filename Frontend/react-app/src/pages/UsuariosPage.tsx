@@ -1,6 +1,6 @@
 import { useEffect, useState, MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteUsuario } from "../services/api";
+import { deleteUsuario } from "../services/api.ts";
 import { useAuth } from "../context/AuthContext";
 
 export default function UsuariosPage(): JSX.Element {

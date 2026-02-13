@@ -1,5 +1,5 @@
 import { useState, FormEvent, ChangeEvent, MouseEvent } from "react";
-import { createUsuario, getUsuarioByEmail } from "../services/api";
+import { createUsuario, getUsuarioByEmail } from "../services/api.ts";
 import { useAuth } from "../context/AuthContext";
 
 interface LoginModalProps {

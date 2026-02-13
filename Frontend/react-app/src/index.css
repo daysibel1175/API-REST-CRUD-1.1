@@ -1,60 +1,82 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light;
-  color: var(--color-text);
-  background-color: var(--color-bg);
+@layer base {
+  :root {
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    color-scheme: light;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+  }
 
-a {
-  font-weight: 500;
-  color: var(--color-primary);
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Poppins", "Inter", system-ui, sans-serif;
+    color: var(--color-text);
+  }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  background: var(--color-bg);
-  color: var(--color-text);
-}
+  p {
+    font-size: 1rem;
+    line-height: 1.75rem;
+    color: var(--color-text);
+  }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+  small {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
 
-button {
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: var(--color-primary);
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  a {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  button {
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: border-color 0.25s;
+  }
+  button:hover {
+    border-color: var(--color-primary);
+  }
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
 }
 
 /* O tema é controlado por variáveis em styles/theme.css e usePalette */

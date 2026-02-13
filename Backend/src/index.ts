@@ -12,15 +12,24 @@ import grupoRoutes from "./routes/grupo";
 import usuarioRoutes from "./routes/usuario";
 
 const app: Application = express();
-const port: number = Number(process.env.PORT) || 9000;
+const basePort: number = Number(process.env.PORT) || 9000;
+const allowedOrigins = (process.env.FRONTEND_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const localhostRegex = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
+const maxPortAttempts = 10;
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(
   cors({
-    origin: process.env.FRONTEND_ORIGIN?.split(",") || [
-      "http://localhost:5173",
-    ],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (localhostRegex.test(origin)) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT", "OPTIONS"],
     credentials: true,
   }),
@@ -47,8 +56,23 @@ mongoose
   .then(() => console.log("Conectado a MongoBD Atlas!"))
   .catch((error: Error) => console.error(error));
 
-app.listen(port, (): void => {
-  console.log(
-    `Servidor Express Escutando... API REST funcionando en http://localhost:${port}`,
-  );
-});
+const startServer = (port: number, attempts = 0): void => {
+  const server = app.listen(port, (): void => {
+    console.log(
+      `Servidor Express Escutando... API REST funcionando en http://localhost:${port}`,
+    );
+  });
+
+  server.on("error", (error: NodeJS.ErrnoException) => {
+    if (error.code === "EADDRINUSE" && attempts < maxPortAttempts) {
+      const nextPort = port + 1;
+      console.warn(`Porta ${port} em uso. Tentando ${nextPort}...`);
+      startServer(nextPort, attempts + 1);
+      return;
+    }
+    console.error("Erro ao iniciar servidor:", error);
+    process.exit(1);
+  });
+};
+
+startServer(basePort);

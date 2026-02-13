@@ -4,7 +4,7 @@ import {
   deleteGrupo,
   fetcher,
   updateGrupo,
-} from "../services/api";
+} from "../services/api.ts";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import ConfirmDialog from "../components/ConfirmDialog";

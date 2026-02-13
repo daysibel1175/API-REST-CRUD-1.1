@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { createGuia, deleteGuia, fetcher, updateGuia } from "../services/api";
+import {
+  createGuia,
+  deleteGuia,
+  fetcher,
+  updateGuia,
+} from "../services/api.ts";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Modal from "../components/Modal";
