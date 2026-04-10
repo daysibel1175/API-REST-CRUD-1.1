@@ -13,7 +13,7 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="navbar__brand" aria-label="Trilhas Brasil">
           <img
-            src="/legacy-images/icono%20da%20API.png"
+            src="/img/icono-da-API.webp"
             alt="Trilhas Brasil"
             className="navbar__brandLogo"
           />

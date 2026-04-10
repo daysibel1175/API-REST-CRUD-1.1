@@ -1,9 +1,7 @@
 import { useEffect } from "react";
 import { Vibrant } from "node-vibrant/browser";
 
-export function usePalette(
-  imagePath: string = "/legacy-images/icono%20da%20API.png",
-): void {
+export function usePalette(imagePath: string = "/img/icono-da-API.webp"): void {
   useEffect(() => {
     const url: string = imagePath;
     Vibrant.from(url)

@@ -1,6 +1,6 @@
 # API-REST-CRUD-1.1
 
-<img src="https://github.com/daysibel1175/API-REST-CRUD-1.1/blob/main/icono%20da%20API.png" alt="My cool logo"/>
+<img src="Frontend/react-app/public/img/icono-da-API.webp" alt="My cool logo"/>
 
 ## Bem-vindo ao repository oficial de API TRILHASBRASIL!
 
@@ -204,5 +204,5 @@ O desenvolvimento de TRILHASBRASIL é liderado pelo grupo de desenvolvedores de 
 
 # Autores
 
-| [<img src="https://github.com/daysibel1175/API-REST-CRUD-1.1/blob/main/Desenvolvedores/fotodericardo.jpg" width=115><br><sub>Ricardo Infante</sub>](https://github.com/Ricardo662) | [<img src="https://github.com/daysibel1175/API-REST-CRUD-1.1/blob/main/Desenvolvedores/fotodewilfried.jpg" width=115><br><sub>Wilfried da Silveira</sub>](https://github.com/tete-coder/) | [<img src="https://github.com/daysibel1175/API-REST-CRUD-1.1/blob/main/Desenvolvedores/fotodedaysibel.jpg" width=115><br><sub>Daysibel Cotiz</sub>](https://github.com/daysibel1175) |
+| [<img src="Frontend/react-app/public/img/fotodericardo.webp" width=115><br><sub>Ricardo Infante</sub>](https://github.com/Ricardo662) | [<img src="Frontend/react-app/public/img/fotodewilfried.webp" width=115><br><sub>Wilfried da Silveira</sub>](https://github.com/tete-coder/) | [<img src="Frontend/react-app/public/img/fotodedaysibel.webp" width=115><br><sub>Daysibel Cotiz</sub>](https://github.com/daysibel1175) |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |

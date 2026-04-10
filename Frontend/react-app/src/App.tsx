@@ -11,7 +11,7 @@ import GruposPage from "./pages/GruposPage";
 import UsuariosPage from "./pages/UsuariosPage";
 
 function App() {
-  usePalette("/legacy-images/icono%20da%20API.png");
+  usePalette("/img/icono-da-API.webp");
   return (
     <AuthProvider>
       <div className="app-container">

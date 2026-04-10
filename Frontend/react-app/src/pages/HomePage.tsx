@@ -1,4 +1,4 @@
-import img from "../../dist/legacy-images/baixados.webp"
+import img from "/img/baixados.webp";
 export default function HomePage(): JSX.Element {
   return (
     <section>

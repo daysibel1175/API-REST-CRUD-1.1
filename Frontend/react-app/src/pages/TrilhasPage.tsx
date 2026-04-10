@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import {
   createTrilha,
   deleteTrilha,
@@ -12,6 +12,7 @@ import ConfirmDialog from "../components/ConfirmDialog";
 import SearchBar from "../components/SearchBar";
 import FilterPanel from "../components/FilterPanel";
 import { Trilha } from "../types";
+import { resolvePromise } from "../utils/index.tsx";
 
 interface TrilhaForm {
   nome: string;
@@ -23,6 +24,9 @@ interface TrilhaForm {
   km_camino: string;
   img: string;
 }
+const TrilhasLista = lazy(() =>
+  resolvePromise(import("../components/Trilhas/TrilhasLista.tsx")),
+);
 
 export default function TrilhasPage() {
   const [data, setData] = useState<Trilha[]>([]);
@@ -494,116 +498,13 @@ export default function TrilhasPage() {
       {filtered.length === 0 ? (
         <p>Nenhuma trilha encontrada.</p>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {filtered.map((t) => (
-            <li
-              key={t._id}
-              style={{
-                marginBottom: "1.5rem",
-                padding: "1rem",
-                border: "1px solid var(--color-border)",
-                borderRadius: "8px",
-                backgroundColor: "var(--color-bg)",
-                display: "flex",
-                gap: "1rem",
-                alignItems: "flex-start",
-              }}
-            >
-              {t.img ? (
-                <img
-                  src={t.img}
-                  alt={t.nome}
-                  style={{
-                    width: "250px",
-                    height: "250px",
-                    objectFit: "cover",
-                    borderRadius: "8px",
-                    flexShrink: 0,
-                  }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: "250px",
-                    height: "250px",
-                    backgroundColor: "var(--color-border)",
-                    borderRadius: "8px",
-                    flexShrink: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "var(--color-muted)",
-                  }}
-                >
-                  Sin imagen
-                </div>
-              )}
-              <div style={{ flex: 1, marginBottom: "0.5rem" }}>
-                <h3 style={{ margin: "0 0 0.5rem 0" }}>{t.nome}</h3>
-                <p style={{ margin: "0.25rem 0", color: "var(--color-muted)" }}>
-                  <strong>Tipo:</strong> {t.tipo_de_trilha}
-                </p>
-                {t.localizacao && (
-                  <p
-                    style={{ margin: "0.25rem 0", color: "var(--color-muted)" }}
-                  >
-                    <strong>Localización:</strong> {t.localizacao}
-                  </p>
-                )}
-                {t.duracao && (
-                  <p
-                    style={{ margin: "0.25rem 0", color: "var(--color-muted)" }}
-                  >
-                    <strong>Duración:</strong> {t.duracao}
-                  </p>
-                )}
-                {(t as any).km_camino && (
-                  <p
-                    style={{ margin: "0.25rem 0", color: "var(--color-muted)" }}
-                  >
-                    <strong>KM de camino:</strong> {(t as any).km_camino}
-                  </p>
-                )}
-                {t.descricao && (
-                  <p style={{ margin: "0.5rem 0", lineHeight: "1.5" }}>
-                    <strong>Descripción:</strong> {t.descricao}
-                  </p>
-                )}
-                {t.dica && (
-                  <p
-                    style={{
-                      margin: "0.5rem 0",
-                      lineHeight: "1.5",
-                      backgroundColor: "var(--color-border)",
-                      padding: "0.5rem",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    <strong>Dicas:</strong> {t.dica}
-                  </p>
-                )}
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "0.5rem",
-                    marginTop: "0.5rem",
-                  }}
-                >
-                  <Button onClick={() => handleEdit(t)} style={{ flex: 1 }}>
-                    Editar
-                  </Button>
-                  <Button
-                    variant="danger"
-                    onClick={() => handleDelete(t._id)}
-                    style={{ flex: 1 }}
-                  >
-                    Deletar
-                  </Button>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <Suspense fallback={<p>Carregando trilhas...</p>}>
+          <TrilhasLista
+            trilhas={filtered}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        </Suspense>
       )}
 
       <ConfirmDialog
