@@ -10,6 +10,7 @@ import trilhasRoutes from "./routes/trilhas";
 import guiaRoutes from "./routes/guias";
 import grupoRoutes from "./routes/grupo";
 import usuarioRoutes from "./routes/usuario";
+import chatRoutes from "./routes/chat";
 
 const app: Application = express();
 const basePort: number = Number(process.env.PORT) || 9000;
@@ -38,6 +39,7 @@ app.use("/trilhasbrasil.com", trilhasRoutes);
 app.use("/trilhasbrasil.com", guiaRoutes);
 app.use("/trilhasbrasil.com", grupoRoutes);
 app.use("/trilhasbrasil.com", usuarioRoutes);
+app.use("/api", chatRoutes);
 
 app.get("/", (_req: Request, res: Response): void => {
   res.send("Welcome to my API");
