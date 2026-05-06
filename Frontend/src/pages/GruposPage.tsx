@@ -177,11 +177,14 @@ export default function GruposPage() {
   const handleRegister = async (grupoId: string) => {
     if (!user) return;
     try {
-      await fetch(`http://localhost:3000/api/grupos/${grupoId}/registrar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ usuarioId: user._id }),
-      });
+      await fetch(
+        `http://localhost:9011/trilhasbrasil.com/api/grupos/${grupoId}/registrar`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ usuarioId: user._id }),
+        },
+      );
       setData((prev) =>
         prev.map((g) => {
           if (g._id === grupoId) {

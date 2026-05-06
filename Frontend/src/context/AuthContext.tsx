@@ -17,10 +17,13 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const login = async (data: LoginData): Promise<void> => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/usuarios", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        "http://localhost:9011/trilhasbrasil.com/api/usuarios",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
       const usuarios: Usuario[] = await response.json();
       const foundUser = usuarios.find((u) => u.email === data.email);
 
