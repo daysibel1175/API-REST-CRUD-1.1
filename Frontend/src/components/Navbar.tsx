@@ -69,7 +69,9 @@ export default function Navbar() {
           )}
           <li>
             {user ? (
-              <>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
                 <NavLink to="/usuarios" onClick={handleNavItemClick}>
                   Mi Cuenta ({user.nome})
                 </NavLink>
@@ -79,17 +81,17 @@ export default function Navbar() {
                     handleNavItemClick();
                   }}
                   style={{
-                    marginLeft: "0.5rem",
                     background: "none",
                     border: "none",
                     color: "var(--color-text)",
                     cursor: "pointer",
                     fontSize: "1rem",
+                    padding: "0.25rem 0.5rem",
                   }}
                 >
                   Logout
                 </button>
-              </>
+              </div>
             ) : (
               <button
                 onClick={() => {
