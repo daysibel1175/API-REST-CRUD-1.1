@@ -9,6 +9,8 @@ interface Message {
   text: string;
   sender: "user" | "bot";
   timestamp: Date;
+  link?: string;
+  linkText?: string;
 }
 
 export default function Chatbot() {
@@ -59,6 +61,8 @@ export default function Chatbot() {
             text: faqMatch.answer,
             sender: "bot",
             timestamp: new Date(),
+            link: faqMatch.link,
+            linkText: faqMatch.linkText,
           };
           setMessages((prev) => [...prev, botMessage]);
           setLoading(false);
@@ -142,6 +146,34 @@ export default function Chatbot() {
               >
                 <div className="chatbot-message-bubble">
                   <p>{message.text}</p>
+                  {message.link && message.linkText && (
+                    <a
+                      href={message.link}
+                      style={{
+                        display: "inline-block",
+                        marginTop: "0.5rem",
+                        padding: "0.4rem 0.8rem",
+                        backgroundColor: "var(--color-primary)",
+                        color: "white",
+                        borderRadius: "0.25rem",
+                        fontSize: "0.85rem",
+                        textDecoration: "none",
+                        cursor: "pointer",
+                        fontWeight: 500,
+                        transition: "background-color 0.2s ease",
+                      }}
+                      onMouseOver={(e) =>
+                        (e.currentTarget.style.backgroundColor =
+                          "var(--color-text)")
+                      }
+                      onMouseOut={(e) =>
+                        (e.currentTarget.style.backgroundColor =
+                          "var(--color-primary)")
+                      }
+                    >
+                      → {message.linkText}
+                    </a>
+                  )}
                   <span className="chatbot-message-time">
                     {message.timestamp.toLocaleTimeString("pt-BR", {
                       hour: "2-digit",
