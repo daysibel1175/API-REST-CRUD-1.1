@@ -39,6 +39,7 @@ const UsuarioSchema = new mongoose_1.Schema({
     idade: { type: Number, required: true },
     contato: { type: Number, required: true },
     email: { type: String, required: true, unique: true },
-    grupo: { type: mongoose_1.Schema.Types.ObjectId, ref: "Grupo" },
+    isAdmin: { type: Boolean, default: false },
+    grupos: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Grupo" }],
 }, { timestamps: true });
 exports.default = mongoose_1.default.model("Usuario", UsuarioSchema);

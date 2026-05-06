@@ -5,6 +5,7 @@ import {
   fetcher,
   updateGuia,
 } from "../services/api.ts";
+import { useAuth } from "../context/AuthContext";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Modal from "../components/Modal";
@@ -18,6 +19,7 @@ interface GuiaForm {
 }
 
 export default function GuiasPage() {
+  const { user } = useAuth();
   const [data, setData] = useState<Guia[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -193,6 +195,10 @@ export default function GuiasPage() {
             fontSize: "1rem",
             whiteSpace: "nowrap",
           }}
+          disabled={!user?.isAdmin}
+          title={
+            !user?.isAdmin ? "Solo administradores pueden agregar guias" : ""
+          }
         >
           + Adicionar
         </button>
@@ -273,16 +279,20 @@ export default function GuiasPage() {
               <div
                 style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}
               >
-                <Button onClick={() => handleEdit(g)} style={{ flex: 1 }}>
-                  Editar
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => handleDelete(g._id)}
-                  style={{ flex: 1 }}
-                >
-                  Deletar
-                </Button>
+                {user?.isAdmin && (
+                  <>
+                    <Button onClick={() => handleEdit(g)} style={{ flex: 1 }}>
+                      Editar
+                    </Button>
+                    <Button
+                      variant="danger"
+                      onClick={() => handleDelete(g._id)}
+                      style={{ flex: 1 }}
+                    >
+                      Deletar
+                    </Button>
+                  </>
+                )}
               </div>
             </li>
           ))}

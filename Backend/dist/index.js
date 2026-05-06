@@ -13,6 +13,7 @@ const trilhas_1 = __importDefault(require("./routes/trilhas"));
 const guias_1 = __importDefault(require("./routes/guias"));
 const grupo_1 = __importDefault(require("./routes/grupo"));
 const usuario_1 = __importDefault(require("./routes/usuario"));
+const chat_1 = __importDefault(require("./routes/chat"));
 const app = (0, express_1.default)();
 const basePort = Number(process.env.PORT) || 9000;
 const allowedOrigins = (process.env.FRONTEND_ORIGIN || "")
@@ -40,6 +41,7 @@ app.use("/trilhasbrasil.com", trilhas_1.default);
 app.use("/trilhasbrasil.com", guias_1.default);
 app.use("/trilhasbrasil.com", grupo_1.default);
 app.use("/trilhasbrasil.com", usuario_1.default);
+app.use("/api", chat_1.default);
 app.get("/", (_req, res) => {
     res.send("Welcome to my API");
 });

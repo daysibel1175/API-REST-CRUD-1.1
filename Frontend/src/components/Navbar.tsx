@@ -60,11 +60,13 @@ export default function Navbar() {
               Guias
             </NavLink>
           </li>
-          <li>
-            <NavLink to="/grupos" onClick={handleNavItemClick}>
-              Grupos
-            </NavLink>
-          </li>
+          {user && (
+            <li>
+              <NavLink to="/grupos" onClick={handleNavItemClick}>
+                Grupos
+              </NavLink>
+            </li>
+          )}
           <li>
             {user ? (
               <>

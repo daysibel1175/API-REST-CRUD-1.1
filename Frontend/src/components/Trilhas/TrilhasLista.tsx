@@ -6,9 +6,17 @@ type TrilhasListaProps = {
   trilhas: Trilha[];
   onEdit: (trilha: Trilha) => void;
   onDelete: (id: string) => void;
+  isAdmin?: boolean;
+  onOpenLoginModal?: () => void;
 };
 
-function TrilhasLista({ trilhas, onEdit, onDelete }: TrilhasListaProps) {
+function TrilhasLista({
+  trilhas,
+  onEdit,
+  onDelete,
+  isAdmin = false,
+  onOpenLoginModal,
+}: TrilhasListaProps) {
   return (
     <div>
       <ul style={{ listStyle: "none", padding: 0 }}>
@@ -116,16 +124,48 @@ function TrilhasLista({ trilhas, onEdit, onDelete }: TrilhasListaProps) {
                   marginTop: "0.5rem",
                 }}
               >
-                <Button onClick={() => onEdit(t)} style={{ flex: 1 }}>
-                  Editar
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => onDelete(t._id)}
-                  style={{ flex: 1 }}
-                >
-                  Deletar
-                </Button>
+                {isAdmin && (
+                  <>
+                    <Button onClick={() => onEdit(t)} style={{ flex: 1 }}>
+                      Editar
+                    </Button>
+                    <Button
+                      variant="danger"
+                      onClick={() => onDelete(t._id)}
+                      style={{ flex: 1 }}
+                    >
+                      Deletar
+                    </Button>
+                  </>
+                )}
+                {!isAdmin && (
+                  <button
+                    onClick={() => onOpenLoginModal?.()}
+                    style={{
+                      flex: 1,
+                      padding: "0.5rem 1rem",
+                      borderRadius: "4px",
+                      border: "1px solid var(--color-primary)",
+                      backgroundColor: "transparent",
+                      color: "var(--color-primary)",
+                      cursor: "pointer",
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "var(--color-primary)";
+                      e.currentTarget.style.color = "white";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.color = "var(--color-primary)";
+                    }}
+                  >
+                    Unirme a un grupo
+                  </button>
+                )}
               </div>
             </div>
           </li>

@@ -5,12 +5,14 @@ import {
   fetcher,
   updateTrilha,
 } from "../services/api.ts";
+import { useAuth } from "../context/AuthContext";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Modal from "../components/Modal";
 import ConfirmDialog from "../components/ConfirmDialog";
 import SearchBar from "../components/SearchBar";
 import FilterPanel from "../components/FilterPanel";
+import LoginModal from "../components/LoginModal";
 import { Trilha } from "../types";
 import { resolvePromise } from "../utils/index.tsx";
 
@@ -29,6 +31,7 @@ const TrilhasLista = lazy(() =>
 );
 
 export default function TrilhasPage() {
+  const { user } = useAuth();
   const [data, setData] = useState<Trilha[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +40,7 @@ export default function TrilhasPage() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] =
     useState<boolean>(false);
@@ -283,6 +287,10 @@ export default function TrilhasPage() {
             fontSize: "1rem",
             whiteSpace: "nowrap",
           }}
+          disabled={!user?.isAdmin}
+          title={
+            !user?.isAdmin ? "Solo administradores pueden agregar trilhas" : ""
+          }
         >
           + Adicionar
         </button>
@@ -504,6 +512,8 @@ export default function TrilhasPage() {
             trilhas={filtered}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            isAdmin={user?.isAdmin}
+            onOpenLoginModal={() => setShowLoginModal(true)}
           />
         </Suspense>
       )}
@@ -517,6 +527,13 @@ export default function TrilhasPage() {
         confirmText="Deletar"
         cancelText="Cancelar"
       />
+
+      <Suspense fallback={null}>
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+        />
+      </Suspense>
     </section>
   );
 }

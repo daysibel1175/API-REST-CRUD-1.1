@@ -37,6 +37,9 @@ const mongoose_1 = __importStar(require("mongoose"));
 const GrupoSchema = new mongoose_1.Schema({
     guia: { type: mongoose_1.Schema.Types.ObjectId, ref: "Guia", required: true },
     familiar: { type: Boolean, default: false },
+    horaPartida: { type: String },
+    horaChegada: { type: String },
     usuario: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Usuario" }],
+    admin: { type: mongoose_1.Schema.Types.ObjectId, ref: "Usuario", required: true },
 }, { timestamps: true });
 exports.default = mongoose_1.default.model("Grupo", GrupoSchema);
