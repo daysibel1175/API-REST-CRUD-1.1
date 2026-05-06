@@ -1,0 +1,137 @@
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/Poppins-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/Poppins-500.woff2") format("woff2");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-family:
+      "Poppins",
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    color-scheme: light;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    min-width: 320px;
+    font-family:
+      "Poppins",
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Poppins", system-ui, sans-serif;
+    color: var(--color-text);
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.75rem;
+    color: var(--color-text);
+  }
+
+  small {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  a {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  button {
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  button:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-bg);
+  }
+  button:focus {
+    outline: none;
+  }
+  button:focus-visible {
+    outline: none;
+    box-shadow:
+      inset 0 0 0 2px var(--color-bg),
+      0 0 0 3px var(--color-primary);
+  }
+  button:active {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  input,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="search"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  input:focus,
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus {
+    outline: none;
+  }
+}
+
+/* O tema é controlado por variáveis em styles/theme.css e usePalette */
