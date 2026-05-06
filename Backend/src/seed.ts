@@ -24,6 +24,13 @@ async function popularBancoDeDados(): Promise<void> {
 
     const usuarios = await Usuario.insertMany([
       {
+        nome: "Admin Trilhas Brasil",
+        idade: 40,
+        contato: 11999999999,
+        email: "admin@trilhasbrasil.com",
+        isAdmin: true,
+      },
+      {
         nome: "Maria Silva",
         idade: 28,
         contato: 11987654321,
@@ -67,22 +74,51 @@ async function popularBancoDeDados(): Promise<void> {
       {
         guia: guias[0]._id,
         familiar: true,
-        usuario: [usuarios[0]._id, usuarios[1]._id],
+        horaPartida: "08:00",
+        horaChegada: "12:00",
+        usuario: [usuarios[1]._id, usuarios[2]._id],
+        admin: usuarios[0]._id,
       },
       {
         guia: guias[1]._id,
         familiar: false,
-        usuario: [usuarios[2]._id, usuarios[4]._id],
+        horaPartida: "06:00",
+        horaChegada: "16:00",
+        usuario: [usuarios[3]._id, usuarios[5]._id],
+        admin: usuarios[0]._id,
       },
-      { guia: guias[2]._id, familiar: true, usuario: [usuarios[3]._id] },
+      {
+        guia: guias[2]._id,
+        familiar: true,
+        horaPartida: "09:00",
+        horaChegada: "13:00",
+        usuario: [usuarios[4]._id],
+        admin: usuarios[0]._id,
+      },
     ]);
     console.log("✅ Grupos criados:", grupos.length);
 
-    await Usuario.updateOne({ _id: usuarios[0]._id }, { grupo: grupos[0]._id });
-    await Usuario.updateOne({ _id: usuarios[1]._id }, { grupo: grupos[0]._id });
-    await Usuario.updateOne({ _id: usuarios[2]._id }, { grupo: grupos[1]._id });
-    await Usuario.updateOne({ _id: usuarios[3]._id }, { grupo: grupos[2]._id });
-    await Usuario.updateOne({ _id: usuarios[4]._id }, { grupo: grupos[1]._id });
+    await Usuario.updateMany({}, { $set: { grupos: [] } });
+    await Usuario.updateOne(
+      { _id: usuarios[1]._id },
+      { grupos: [grupos[0]._id] },
+    );
+    await Usuario.updateOne(
+      { _id: usuarios[2]._id },
+      { grupos: [grupos[0]._id] },
+    );
+    await Usuario.updateOne(
+      { _id: usuarios[3]._id },
+      { grupos: [grupos[1]._id] },
+    );
+    await Usuario.updateOne(
+      { _id: usuarios[4]._id },
+      { grupos: [grupos[2]._id] },
+    );
+    await Usuario.updateOne(
+      { _id: usuarios[5]._id },
+      { grupos: [grupos[1]._id] },
+    );
 
     const trilhas = await Trilha.insertMany([
       {
