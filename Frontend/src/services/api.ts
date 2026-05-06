@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import type { Usuario, Trilha, Guia, Grupo } from "../types";
 
 const baseURL: string =
-  import.meta.env.VITE_API_BASE || "http://localhost:9000/trilhasbrasil.com";
+  import.meta.env.VITE_API_BASE || "http://localhost:9011";
 
 export const api: AxiosInstance = axios.create({
   baseURL,

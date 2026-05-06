@@ -178,7 +178,7 @@ export default function GruposPage() {
     if (!user) return;
     try {
       await fetch(
-        `http://localhost:9011/trilhasbrasil.com/api/grupos/${grupoId}/registrar`,
+        `http://localhost:9011/api/grupos/${grupoId}/registrar`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
