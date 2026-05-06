@@ -117,7 +117,9 @@ router.post(
         $addToSet: { grupos: req.params.id },
       });
 
-      const updated = await grupo.populate("usuario").populate("guia");
+      const updated = await Grupo.findById(req.params.id)
+        .populate("usuario")
+        .populate("guia");
       return res.status(200).json(updated);
     } catch (error) {
       return res
@@ -151,7 +153,9 @@ router.post(
         $pull: { grupos: req.params.id },
       });
 
-      const updated = await grupo.populate("usuario").populate("guia");
+      const updated = await Grupo.findById(req.params.id)
+        .populate("usuario")
+        .populate("guia");
       return res.status(200).json(updated);
     } catch (error) {
       return res
