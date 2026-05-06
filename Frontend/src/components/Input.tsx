@@ -29,17 +29,10 @@ export default function Input({
   style = {},
   className = "",
   required = false,
-  variant = "default",
   size = "md",
   fullWidth = true,
   disabled = false,
 }: InputProps) {
-  const sizeClasses: Record<InputSize, string> = {
-    sm: "px-2.5 py-1.5 text-sm",
-    md: "px-3 py-2 text-base",
-    lg: "px-4 py-2.5 text-lg",
-  };
-
   const baseStyle: CSSProperties = {
     width: fullWidth ? "100%" : "auto",
     boxSizing: "border-box",
