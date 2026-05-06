@@ -6,7 +6,8 @@ export interface Usuario {
   idade: number;
   contato: number;
   email: string;
-  grupo?: string;
+  isAdmin?: boolean;
+  grupos?: string[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -40,7 +41,10 @@ export interface Grupo {
   _id: string;
   guia: string | Guia;
   familiar: boolean;
+  horaPartida?: string;
+  horaChegada?: string;
   usuario?: string[] | Usuario[];
+  admin?: string;
   createdAt?: string;
   updatedAt?: string;
 }

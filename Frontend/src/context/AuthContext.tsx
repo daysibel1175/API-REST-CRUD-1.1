@@ -12,12 +12,27 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     const saved = localStorage.getItem("user");
     return saved ? JSON.parse(saved) : null;
   });
-  const [isLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const login = async (data: LoginData): Promise<void> => {
-    const userData: Usuario = { ...data, _id: "", nome: "", idade: 0, contato: 0 };
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    setIsLoading(true);
+    try {
+      const response = await fetch("http://localhost:3000/api/usuarios", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const usuarios: Usuario[] = await response.json();
+      const foundUser = usuarios.find((u) => u.email === data.email);
+
+      if (foundUser) {
+        setUser(foundUser);
+        localStorage.setItem("user", JSON.stringify(foundUser));
+      } else {
+        throw new Error("Usuario no encontrado");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = (): void => {
