@@ -18,7 +18,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:9011/api/usuarios",
+        "http://localhost:9011/trilhasbrasil.com/api/usuarios",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
