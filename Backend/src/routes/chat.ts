@@ -9,7 +9,9 @@ interface ChatRequest {
 
 interface ChatResponse {
   response: string;
-  tokensUsed?: number;
+  tokensUsedEntrada?: number;
+  tokensUsedSalida?: number;
+  tokensTotales?: number;
   modelUsed?: string;
 }
 
@@ -58,13 +60,13 @@ router.post("/chat", async (req: Request, res: Response): Promise<void> => {
     const threshold = modelLimit * SWITCH_THRESHOLD;
 
     console.log(
-      `[TOKENS] Modelo: ${modelName} | Tokens: ${inputTokens}/${modelLimit} | Umbral: ${threshold}`
+      `[TOKENS] Modelo: ${modelName} | Tokens: ${inputTokens}/${modelLimit} | Umbral: ${threshold}`,
     );
 
     // Si los tokens de entrada superan el 80% del límite, cambiar a modelo pro
     if (inputTokens > threshold) {
       console.log(
-        `[CAMBIO MODELO] Tokens (${inputTokens}) superan umbral (${threshold}). Cambiando a gemini-1.5-pro`
+        `[CAMBIO MODELO] Tokens (${inputTokens}) superan umbral (${threshold}). Cambiando a gemini-1.5-pro`,
       );
       modelName = "gemini-1.5-pro";
       model = genAI.getGenerativeModel({ model: modelName });
@@ -73,9 +75,20 @@ router.post("/chat", async (req: Request, res: Response): Promise<void> => {
     const result = await model.generateContent(prompt);
     const responseText = result.response.text();
 
+    // Contar tokens de salida
+    const outputTokenCountResult = await model.countTokens(responseText);
+    const outputTokens = outputTokenCountResult.totalTokens;
+    const totalTokens = inputTokens + outputTokens;
+
+    console.log(
+      `[TOKENS TOTALES] Entrada: ${inputTokens} | Salida: ${outputTokens} | Total: ${totalTokens}`,
+    );
+
     const response: ChatResponse = {
       response: responseText,
-      tokensUsed: inputTokens,
+      tokensUsedEntrada: inputTokens,
+      tokensUsedSalida: outputTokens,
+      tokensTotales: totalTokens,
       modelUsed: modelName,
     };
 
