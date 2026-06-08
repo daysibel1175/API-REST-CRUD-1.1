@@ -9,7 +9,9 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "seed": "ts-node src/seed.ts",
-    "gemini:cli": "ts-node src/ai/gemini-cli.ts"
+    "gemini:cli": "ts-node src/ai/gemini-cli.ts",
+    "import:overpass": "ts-node src/scripts/import-overpass.ts",
+    "cleanup:trilhas-importadas": "ts-node src/scripts/cleanup-imported-trilhas.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

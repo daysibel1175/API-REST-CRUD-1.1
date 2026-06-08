@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, ChangeEvent } from "react";
 import Button from "../Button";
 import Input from "../Input";
+import { chatApi } from "../../services/api";
 import { searchFAQ } from "../../utils/faq";
 import "./chatbot.css";
 
@@ -15,10 +16,18 @@ interface Message {
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [userName, setUserName] = useState(() => {
+    return sessionStorage.getItem("trilhasbrasil.chat.userName") ?? "";
+  });
+  const [awaitingName, setAwaitingName] = useState(() => {
+    return !sessionStorage.getItem("trilhasbrasil.chat.userName");
+  });
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Olá! Sou o assistente do Trilhas Brasil. Como posso ajudá-lo?",
+      text: userName
+        ? `Olá, ${userName}! Como posso ajudar você hoje?`
+        : "Olá! Antes de continuarmos, como você se chama?",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -35,12 +44,85 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    if (userName.trim()) {
+      sessionStorage.setItem("trilhasbrasil.chat.userName", userName.trim());
+    } else {
+      sessionStorage.removeItem("trilhasbrasil.chat.userName");
+    }
+  }, [userName]);
+
+  const detectLanguage = (text: string): "es" | "pt" => {
+    const t = text.toLowerCase();
+    const spanishIndicators =
+      /\b(cual|cuál|esas|estas|mas corta|más corta|mas larga|más larga|por favor|gracias|hola|cuanto|cuánto)\b/i;
+    return spanishIndicators.test(t) ? "es" : "pt";
+  };
+
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
+    const messageText = input.trim();
+    const normalizedInput = messageText.toLowerCase();
+    const isGreeting =
+      /^(hola|ol[aá]|hello|hi|buenas|bom dia|boa tarde|boa noite)\b/.test(
+        normalizedInput,
+      );
+
+    if (awaitingName) {
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        text: messageText,
+        sender: "user",
+        timestamp: new Date(),
+      };
+
+      setMessages((prev) => [...prev, userMessage]);
+      setInput("");
+      setLoading(true);
+
+      if (isGreeting) {
+        setTimeout(() => {
+          const botMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            text: "Olá! Antes de continuarmos, como você se chama?",
+            sender: "bot",
+            timestamp: new Date(),
+          };
+
+          setMessages((prev) => [...prev, botMessage]);
+          setLoading(false);
+        }, 150);
+
+        return;
+      }
+
+      const name = messageText.replace(/\s+/g, " ");
+      setTimeout(() => {
+        const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: `Prazer, ${name}! Como posso ajudar você hoje?`,
+          sender: "bot",
+          timestamp: new Date(),
+        };
+
+        setUserName(name);
+        setAwaitingName(false);
+        setMessages((prev) => [...prev, botMessage]);
+        setLoading(false);
+      }, 300);
+
+      return;
+    }
+
+    const isLocationOrFamilyQuery =
+      /s[ãa]o paulo|sao paulo|rio de janeiro|perto do rio|perto de sao paulo|perto de s[ãa]o paulo|famili|familia|para familia|para famílias|para familias|familiar|qual trilha|quais trilhas|que trilhas|trilhas.*perto|perto.*trilhas|dificil|difícil|facil|fácil|media|média/.test(
+        normalizedInput,
+      );
+
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: input,
+      text: messageText,
       sender: "user",
       timestamp: new Date(),
     };
@@ -49,9 +131,25 @@ export default function Chatbot() {
     setInput("");
     setLoading(true);
 
+    if (isGreeting) {
+      setTimeout(() => {
+        const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: userName
+            ? `Olá, ${userName}! Em que posso ajudar?`
+            : "Hola, en qué puedo ayudar?",
+          sender: "bot",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, botMessage]);
+        setLoading(false);
+      }, 150);
+      return;
+    }
+
     try {
-      // Buscar na FAQ primeiro
-      const faqMatch = searchFAQ(input);
+      // Buscar na FAQ primeiro, mas evitar respostas genéricas em perguntas dinâmicas
+      const faqMatch = !isLocationOrFamilyQuery ? searchFAQ(messageText) : null;
 
       if (faqMatch) {
         // Se encontrar na FAQ, responde com a resposta da FAQ
@@ -70,37 +168,55 @@ export default function Chatbot() {
       } else {
         // Se não encontrar, chama a API (Gemini)
         try {
-          const response = await fetch("/api/chat", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ message: input }),
+          const historyForApi = [...messages, userMessage]
+            .slice(-10)
+            .map((m) => ({
+              role: m.sender === "user" ? "user" : "bot",
+              content: m.text,
+            }));
+
+          const langToSend = detectLanguage(messageText);
+
+          const response = await chatApi.post("/chat", {
+            message: messageText,
+            userName: userName || undefined,
+            history: historyForApi,
+            lang: langToSend,
           });
 
-          if (!response.ok) {
-            throw new Error("Erro ao chamar a API");
-          }
-
-          const data = await response.json();
+          const data = response.data;
+          const responseText =
+            typeof data.response === "string"
+              ? data.response.replace(/^"|"$/g, "")
+              : "Resposta recebida.";
 
           const botMessage: Message = {
             id: (Date.now() + 1).toString(),
-            text:
-              data.response || "Desculpe, não consegui processar sua pergunta.",
+            text: responseText,
             sender: "bot",
             timestamp: new Date(),
+            link: data.link ?? undefined,
+            linkText: data.linkText ?? undefined,
           };
           setMessages((prev) => [...prev, botMessage]);
           setLoading(false);
         } catch (apiError) {
           console.error("Erro ao chamar API:", apiError);
-          // Fallback: resposta genérica
+          // Fallback: manter resposta útil com acesso direto às trilhas
+          const langToSend = detectLanguage(messageText);
           const botMessage: Message = {
             id: (Date.now() + 1).toString(),
-            text: "Desculpe, não consegui processar sua pergunta neste momento. Tente novamente mais tarde.",
+            text:
+              langToSend === "es"
+                ? "He tenido una inestabilidad, pero no te dejaré sin respuesta. Aquí tienes algunas rutas:"
+                : "Tive uma instabilidade agora, mas não vou te deixar sem resposta. Vamos direto para as trilhas disponíveis:",
             sender: "bot",
             timestamp: new Date(),
+            link: "/trilhas",
+            linkText:
+              langToSend === "es"
+                ? "Ver todas las rutas"
+                : "Ver todas as trilhas",
           };
           setMessages((prev) => [...prev, botMessage]);
           setLoading(false);
@@ -200,7 +316,9 @@ export default function Chatbot() {
           <div className="chatbot-input-area">
             <Input
               type="text"
-              placeholder="Digite sua pergunta..."
+              placeholder={
+                awaitingName ? "Digite seu nome..." : "Digite sua pergunta..."
+              }
               value={input}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setInput(e.target.value)

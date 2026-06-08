@@ -16,12 +16,12 @@ const usuario_1 = __importDefault(require("./routes/usuario"));
 const chat_1 = __importDefault(require("./routes/chat"));
 const app = (0, express_1.default)();
 const basePort = Number(process.env.PORT) || 9000;
+const maxPort = basePort + 10;
 const allowedOrigins = (process.env.FRONTEND_ORIGIN || "")
     .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean);
 const localhostRegex = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
-const maxPortAttempts = 10;
 app.use(express_1.default.json({ limit: "50mb" }));
 app.use(express_1.default.urlencoded({ limit: "50mb", extended: true }));
 app.use((0, cors_1.default)({
@@ -55,18 +55,17 @@ mongoose_1.default
     .connect(process.env.KEY_URI)
     .then(() => console.log("Conectado a MongoBD Atlas!"))
     .catch((error) => console.error(error));
-const startServer = (port, attempts = 0) => {
+const startServer = (port) => {
     const server = app.listen(port, () => {
         console.log(`Servidor Express Escutando... API REST funcionando en http://localhost:${port}`);
     });
     server.on("error", (error) => {
-        if (error.code === "EADDRINUSE" && attempts < maxPortAttempts) {
-            const nextPort = port + 1;
-            console.warn(`Porta ${port} em uso. Tentando ${nextPort}...`);
-            startServer(nextPort, attempts + 1);
+        if (error.code === "EADDRINUSE" && port < maxPort) {
+            console.warn(`Porta ${port} em uso, tentando ${port + 1}...`);
+            startServer(port + 1);
             return;
         }
-        console.error("Erro ao iniciar servidor:", error);
+        console.error(error);
         process.exit(1);
     });
 };

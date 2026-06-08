@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import Trilha from "../models/trilhas";
+import { importarTrilhasOverpass } from "../services/trilhasImport";
 
 const router: Router = express.Router();
 
@@ -21,6 +22,25 @@ router.post(
       return res
         .status(500)
         .json({ message: "Erro interno", error: String(error) });
+    }
+  },
+);
+
+router.post(
+  "/trilhas/importar-overpass",
+  async (_req: Request, res: Response): Promise<Response> => {
+    try {
+      const stats = await importarTrilhasOverpass();
+
+      return res.status(200).json({
+        message: "Importação concluída sem apagar registros existentes",
+        ...stats,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Erro ao importar trilhas externas",
+        error: String(error),
+      });
     }
   },
 );

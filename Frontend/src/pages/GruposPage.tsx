@@ -5,6 +5,7 @@ import {
   fetcher,
   updateGrupo,
 } from "../services/api.ts";
+import { api } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
@@ -177,14 +178,9 @@ export default function GruposPage() {
   const handleRegister = async (grupoId: string) => {
     if (!user) return;
     try {
-      await fetch(
-        `http://localhost:9011/trilhasbrasil.com/grupos/${grupoId}/registrar`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ usuarioId: user._id }),
-        },
-      );
+      await api.post(`/grupos/${grupoId}/registrar`, {
+        usuarioId: user._id,
+      });
       setData((prev) =>
         prev.map((g) => {
           if (g._id === grupoId) {

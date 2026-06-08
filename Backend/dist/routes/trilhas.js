@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const trilhas_1 = __importDefault(require("../models/trilhas"));
+const trilhasImport_1 = require("../services/trilhasImport");
 const router = express_1.default.Router();
 router.post("/trilhas", async (req, res) => {
     try {
@@ -22,6 +23,21 @@ router.post("/trilhas", async (req, res) => {
         return res
             .status(500)
             .json({ message: "Erro interno", error: String(error) });
+    }
+});
+router.post("/trilhas/importar-overpass", async (_req, res) => {
+    try {
+        const stats = await (0, trilhasImport_1.importarTrilhasOverpass)();
+        return res.status(200).json({
+            message: "Importação concluída sem apagar registros existentes",
+            ...stats,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            message: "Erro ao importar trilhas externas",
+            error: String(error),
+        });
     }
 });
 router.get("/trilhas", async (_req, res) => {

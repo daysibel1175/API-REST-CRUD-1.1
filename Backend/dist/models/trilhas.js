@@ -35,12 +35,16 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const TrilhaSchema = new mongoose_1.Schema({
+    osm_id: { type: Number, unique: true, sparse: true },
     nome: { type: String, required: true },
     tipo_de_trilha: { type: String, required: true },
+    tipo_de_rota: { type: String },
+    distancia: { type: String },
     descricao: { type: String },
     localizacao: { type: String },
     dica: { type: String },
     duracao: { type: String },
+    fonte: { type: String },
     img: { type: String },
     guia: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Guia" }],
     grupo: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Grupo" }],

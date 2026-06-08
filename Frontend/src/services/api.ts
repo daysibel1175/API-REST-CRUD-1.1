@@ -1,11 +1,23 @@
 import axios, { AxiosInstance } from "axios";
 import type { Usuario, Trilha, Guia, Grupo } from "../types";
 
-const baseURL: string =
-  import.meta.env.VITE_API_BASE || "http://localhost:9011/trilhasbrasil.com";
+const apiOrigin: string =
+  import.meta.env.VITE_API_ORIGIN ??
+  import.meta.env.VITE_API_BASE ??
+  "http://localhost:9000";
+
+const buildBaseURL = (path: string): string =>
+  `${apiOrigin.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 
 export const api: AxiosInstance = axios.create({
-  baseURL,
+  baseURL: buildBaseURL("trilhasbrasil.com"),
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const chatApi: AxiosInstance = axios.create({
+  baseURL: buildBaseURL("api"),
   headers: {
     "Content-Type": "application/json",
   },

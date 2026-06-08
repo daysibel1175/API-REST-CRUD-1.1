@@ -14,12 +14,16 @@ export interface Usuario {
 
 export interface Trilha {
   _id: string;
+  osm_id?: number;
   nome: string;
   tipo_de_trilha: string;
+  tipo_de_rota?: string;
+  distancia?: string;
   descricao?: string;
   localizacao?: string;
   dica?: string;
   duracao?: string;
+  fonte?: string;
   img?: string;
   guia?: string[] | Guia[];
   grupo?: string[] | Grupo[];

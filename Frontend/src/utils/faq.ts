@@ -219,8 +219,33 @@ export const FAQ: FAQItem[] = [
   },
 ];
 
+function normalizeText(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+}
+
+const CATEGORY_PRIORITY: Record<FAQItem["category"], number> = {
+  guias: 3,
+  trilhas: 2,
+  horarios: 1,
+  grupos: 1,
+  geral: 0,
+};
+
 export function searchFAQ(userMessage: string): FAQItem | null {
-  const messageLower = userMessage.toLowerCase().trim();
+  const messageLower = normalizeText(userMessage);
+
+  // Perguntas com intenção dinâmica devem ir para o backend, não para a FAQ.
+  const dynamicQueryPattern =
+    /sao paulo|rio de janeiro|perto do rio|perto de sao paulo|familia|para familia|familiar|qual trilha|quais trilhas|que trilhas|trilhas.*perto|perto.*trilhas|dificil|facil|media/;
+  if (dynamicQueryPattern.test(messageLower)) {
+    return null;
+  }
+
   const words = messageLower.split(/\s+/).filter((w) => w.length > 1);
 
   // Palabras que ignoran (stopwords)
@@ -241,25 +266,32 @@ export function searchFAQ(userMessage: string): FAQItem | null {
   const meaningfulWords = words.filter((w) => !stopwords.has(w));
 
   let bestMatch: { item: FAQItem; score: number } | null = null;
+  let bestPriority = -1;
 
   // Buscar correspondências de palabras-clave con scoring mejorado
   for (const faqItem of FAQ) {
     let score = 0;
     let exactMatches = 0;
+    const itemPriority = CATEGORY_PRIORITY[faqItem.category];
 
     for (const keyword of faqItem.keywords) {
+      const normalizedKeyword = normalizeText(keyword);
+
       for (const word of meaningfulWords) {
         // Match exacto completo
-        if (word === keyword) {
+        if (word === normalizedKeyword) {
           score += 10;
           exactMatches++;
         }
         // Match exacto del inicio
-        else if (word.startsWith(keyword) && keyword.length > 2) {
+        else if (
+          word.startsWith(normalizedKeyword) &&
+          normalizedKeyword.length > 2
+        ) {
           score += 5;
         }
         // Keyword contiene la palabra (menos relevante)
-        else if (keyword.includes(word) && word.length > 3) {
+        else if (normalizedKeyword.includes(word) && word.length > 3) {
           score += 2;
         }
       }
@@ -272,8 +304,13 @@ export function searchFAQ(userMessage: string): FAQItem | null {
       (exactMatches > 0 && score > 5) ||
       (score >= 10 && meaningfulWords.length > 0)
     ) {
-      if (!bestMatch || score > bestMatch.score) {
+      if (
+        !bestMatch ||
+        score > bestMatch.score ||
+        (score === bestMatch.score && itemPriority > bestPriority)
+      ) {
         bestMatch = { item: faqItem, score };
+        bestPriority = itemPriority;
       }
     }
   }

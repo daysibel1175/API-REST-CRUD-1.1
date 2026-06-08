@@ -44,6 +44,13 @@ Crie um arquivo `.env` na pasta `Backend` com:
 ```env
 KEY_URI=sua_connection_string_do_mongodb_atlas
 PORT=9000
+FRONTEND_ORIGIN=http://localhost:5173
+```
+
+Crie também um arquivo `.env.local` na pasta `Frontend` com:
+
+```env
+VITE_API_ORIGIN=http://localhost:9000
 ```
 
 > **Nota**: Obtenha sua Connection String no [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)

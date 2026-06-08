@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode, JSX } from "react";
+import { api } from "../services/api";
 import type { Usuario, AuthContextType, LoginData } from "../types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,14 +18,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const login = async (data: LoginData): Promise<void> => {
     setIsLoading(true);
     try {
-      const response = await fetch(
-        "http://localhost:9011/trilhasbrasil.com/usuarios",
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        },
-      );
-      const usuarios: Usuario[] = await response.json();
+      const { data: usuarios } = await api.get<Usuario[]>("/usuarios");
       const foundUser = usuarios.find((u) => u.email === data.email);
 
       if (foundUser) {
