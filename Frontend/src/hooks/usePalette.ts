@@ -1,0 +1,27 @@
+import { useEffect } from "react";
+import { Vibrant } from "node-vibrant/browser";
+
+export function usePalette(imagePath: string = "/img/icono-da-API.webp"): void {
+  useEffect(() => {
+    const url: string = imagePath;
+    Vibrant.from(url)
+      .getPalette()
+      .then((palette) => {
+        const vibr: string = palette.Vibrant?.hex || "#7b9409";
+        const muted: string = palette.Muted?.hex || "#8bb45c";
+        const dark: string = palette.DarkMuted?.hex || "#2e5124";
+        const light: string = palette.LightMuted?.hex || "#b9c7ae";
+
+        const root: CSSStyleDeclaration = document.documentElement.style;
+        root.setProperty("--color-primary", vibr);
+        root.setProperty("--color-muted", muted);
+        root.setProperty("--color-text", dark);
+        root.setProperty("--color-bg", light);
+        // borda: mistura leve entre texto e bg
+        root.setProperty("--color-border", "#e5e7eb");
+      })
+      .catch(() => {
+        // Fallbacks já estão em theme.css
+      });
+  }, [imagePath]);
+}
